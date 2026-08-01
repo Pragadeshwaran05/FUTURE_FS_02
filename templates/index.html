@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pragu Tech Solutions</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+
+    <div class="container">
+
+        <a class="navbar-brand d-flex align-items-center" href="/">
+
+            <img src="{{ url_for('static', filename='images/logo.png') }}"
+                 class="logo"
+                 alt="Logo">
+
+            <div class="ms-2">
+
+                <h4 class="company-name mb-0">
+                    Pragu Tech Solutions
+                </h4>
+
+                <small class="company-tagline">
+                    Innovating Today. Empowering Tomorrow.
+                </small>
+
+            </div>
+
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbar">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar">
+
+            <ul class="navbar-nav mx-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">Services</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#portfolio">Portfolio</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#technologies">Technologies</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+
+            </ul>
+
+          <div class="d-flex align-items-center">
+
+    <!-- Theme Button -->
+
+    <button id="theme-toggle"
+            class="btn btn-outline-primary rounded-circle me-3"
+            style="width:45px;height:45px;">
+
+        <i class="bi bi-moon-fill"></i>
+
+    </button>
+
+    <!-- Login -->
+
+    <a href="/login" class="btn btn-primary admin-btn">
+
+        <i class="bi bi-lock"></i>
+
+        Admin Login
+
+    </a>
+
+</div>
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+<div class="container-fluid hero-container">
+        <div class="row align-items-center gx-0">
+
+            <!-- Left -->
+
+            <div class="col-lg-5" data-aos="fade-right">
+
+                <span class="hero-badge">
+                    🚀 We Build Digital Success
+                </span>
+
+                <h1 class="hero-title">
+
+                    Transform Your Ideas
+
+                    <br>
+
+                    Into Powerful
+
+                    <br>
+
+                    <span>Digital Solutions</span>
+
+                </h1>
+
+                <p class="hero-text">
+
+                    We design and develop websites, mobile applications,
+                    CRM systems, AI solutions, cloud platforms,
+                    and custom software that help businesses grow faster.
+
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="#contact"
+                       class="btn btn-primary hero-btn">
+
+                        Get a Free Quote
+
+                    </a>
+
+                    <a href="#contact"
+                       class="btn btn-outline-primary hero-btn-outline">
+
+                        Contact Us
+
+                    </a>
+
+                </div>
+
+                <div class="hero-stats">
+
+                    <div class="stat-card">
+
+                        <h4>50+</h4>
+
+                        <p>Happy Clients</p>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <h4>100+</h4>
+
+                        <p>Projects</p>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <h4>20+</h4>
+
+                        <p>Technologies</p>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <h4>24/7</h4>
+
+                        <p>Support</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right -->
+
+            <div class="col-lg-7 text-center" data-aos="fade-left">
+
+                <div class="hero-image-box">
+
+                    <img src="{{ url_for('static', filename='images/hero.png') }}"
+                         class="hero-image img-fluid"
+                         alt="Hero">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= ABOUT ================= -->
+
+<section id="about" class="about-section">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <!-- Left Image -->
+
+            <div class="col-lg-6" data-aos="fade-right">
+
+                <img src="{{ url_for('static', filename='images/about.png') }}"
+                     class="img-fluid about-image"
+                     alt="About">
+
+            </div>
+
+            <!-- Right Content -->
+
+            <div class="col-lg-6" data-aos="fade-left">
+
+                <span class="section-tag">
+                    ABOUT US
+                </span>
+
+                <h2 class="section-title">
+                    We Build Modern Digital Solutions
+                </h2>
+
+                <p class="section-text">
+
+                    Pragu Tech Solutions is a software development company dedicated
+                    to helping businesses grow through innovative technology.
+                    We specialize in web applications, CRM systems, mobile apps,
+                    AI-powered solutions, cloud services, and custom software tailored
+                    to meet unique business needs.
+
+                </p>
+
+                <div class="about-features">
+
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Professional Web Development</span>
+                    </div>
+
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Custom CRM & ERP Systems</span>
+                    </div>
+
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>AI & Machine Learning Solutions</span>
+                    </div>
+
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Cloud & Database Management</span>
+                    </div>
+
+                </div>
+
+                <a href="#contact" class="btn btn-primary mt-4">
+                    Learn More
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- ================= SERVICES ================= -->
+
+<section id="services" class="services-section">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <span class="section-tag">
+                OUR SERVICES
+            </span>
+
+            <h2 class="section-title">
+                Solutions We Provide
+            </h2>
+
+            <p class="section-text mx-auto">
+
+                We deliver innovative software solutions that help businesses
+                automate processes, improve productivity, and accelerate growth.
+
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Service 1 -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="service-card"
+     data-aos="zoom-in-up"
+     data-aos-duration="1000">
+
+                    <div class="service-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+
+                    <h4>Website Development</h4>
+
+                    <p>
+
+                        Professional responsive websites using modern technologies
+                        tailored for your business.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Service 2 -->
+
+            <div class="col-lg-4 col-md-6">
+
+               <div class="service-card"
+     data-aos="zoom-in-up"
+     data-aos-duration="1100">
+
+                    <div class="service-icon">
+                        <i class="fas fa-mobile-screen-button"></i>
+                    </div>
+
+                    <h4>Mobile App Development</h4>
+
+                    <p>
+
+                        Android and iOS applications with modern UI and
+                        high performance.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Service 3 -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="service-card"
+     data-aos="zoom-in-up"
+     data-aos-duration="1200">
+
+                    <div class="service-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+
+                    <h4>CRM Solutions</h4>
+
+                    <p>
+
+                        Powerful CRM software to manage leads,
+                        customers and business operations.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Service 4 -->
+
+            <div class="col-lg-4 col-md-6">
+
+               <div class="service-card"
+     data-aos="zoom-in-up"
+     data-aos-duration="1300">
+
+                    <div class="service-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+
+                    <h4>Artificial Intelligence</h4>
+
+                    <p>
+
+                        AI-powered automation, prediction systems,
+                        chatbots and intelligent applications.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Service 5 -->
+
+            <div class="col-lg-4 col-md-6">
+
+               <div class="service-card"
+     data-aos="zoom-in-up"
+     data-aos-duration="1400">
+
+                    <div class="service-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+
+                    <h4>Cloud Solutions</h4>
+
+                    <p>
+
+                        Secure cloud infrastructure,
+                        hosting and deployment services.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Service 6 -->
+
+            <div class="col-lg-4 col-md-6">
+
+              <div class="service-card"
+     data-aos="zoom-in-up"
+     data-aos-duration="1500">
+
+                    <div class="service-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+
+                    <h4>Custom Software</h4>
+
+                    <p>
+
+                        Custom business software developed
+                        according to your requirements.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= PORTFOLIO ================= -->
+
+<section id="portfolio" class="portfolio-section">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <span class="section-tag">
+                OUR PORTFOLIO
+            </span>
+
+            <h2 class="section-title">
+                Featured Projects
+            </h2>
+
+            <p class="section-text mx-auto">
+
+                Explore some of the innovative software solutions we have developed
+                for businesses and organizations.
+
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Project 1 -->
+
+            <div class="col-lg-4 col-md-6">
+
+              <div class="portfolio-card" data-aos="fade-right"
+     data-aos-duration="1000">
+
+                    <img src="{{ url_for('static', filename='images/crm.jpg') }}"
+                         class="portfolio-img"
+                         alt="CRM">
+
+                    <div class="portfolio-content">
+
+                        <span class="portfolio-category">
+                            CRM
+                        </span>
+
+                        <h4>LeadFlow CRM</h4>
+
+                        <p>
+
+                            A complete Customer Relationship Management system
+                            for managing leads, clients and sales.
+
+                        </p>
+
+                        <div class="portfolio-tech">
+
+                            <span>Flask</span>
+                            <span>SQLite</span>
+                            <span>Bootstrap</span>
+
+                        </div>
+
+                      
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Project 2 -->
+
+            <div class="col-lg-4 col-md-6">
+
+              <div class="portfolio-card"data-aos="fade-right"
+     data-aos-duration="1100">
+                    <img src="{{ url_for('static', filename='images/social.jpg') }}"
+                         class="portfolio-img"
+                         alt="Social Media">
+
+                    <div class="portfolio-content">
+
+                        <span class="portfolio-category">
+                            Social Media
+                        </span>
+
+                        <h4>Connecto</h4>
+
+                        <p>
+
+                            A modern social networking platform with posts,
+                            messaging and user profiles.
+
+                        </p>
+
+                        <div class="portfolio-tech">
+
+                            <span>Django</span>
+                            <span>Bootstrap</span>
+                            <span>SQLite</span>
+
+                        </div>
+
+                       
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Project 3 -->
+
+            <div class="col-lg-4 col-md-6">
+
+              <div class="portfolio-card"data-aos="fade-right"
+     data-aos-duration="1200">
+
+                    <img src="{{ url_for('static', filename='images/ai.jpg') }}"
+                         class="portfolio-img"
+                         alt="AI">
+
+                    <div class="portfolio-content">
+
+                        <span class="portfolio-category">
+                            Artificial Intelligence
+                        </span>
+
+                        <h4>MedRisk AI</h4>
+
+                        <p>
+
+                            AI-powered disease prediction platform using
+                            machine learning models.
+
+                        </p>
+
+                        <div class="portfolio-tech">
+
+                            <span>Python</span>
+                            <span>Streamlit</span>
+                            <span>XGBoost</span>
+
+                        </div>
+
+                      
+                    </div>
+
+                </div>
+
+            </div>
+              <!-- Project 4 -->
+
+            <div class="col-lg-4 col-md-6">
+
+              <div class="portfolio-card"data-aos="fade-right"
+     data-aos-duration="1100">
+                    <img src="{{ url_for('static', filename='images/restaurant.png') }}"
+                         class="portfolio-img"
+                         alt="Social Media">
+
+                    <div class="portfolio-content">
+
+                        <span class="portfolio-category">
+                            Mini Restaurant
+                        </span>
+
+                        <h4>Taste Haven</h4>
+
+                        <p>
+
+                            A modern restaurant management platform with online ordering, table reservations, menu management, and customer reviews.
+
+                        </p>
+
+                        <div class="portfolio-tech">
+
+                            <span>Flask</span>
+                            <span>Bootstrap</span>
+                            <span>SQLite</span>
+
+                        </div>
+
+                       
+
+                    </div>
+
+                </div>
+
+            </div>
+            
+              <!-- Project 5 -->
+
+            <div class="col-lg-4 col-md-6">
+                          <div class="portfolio-card"data-aos="fade-right"
+     data-aos-duration="1100">
+                    <img src="{{ url_for('static', filename='images/ecommerce.png') }}"
+                         class="portfolio-img"
+                         alt="E-Commerce">
+
+                    <div class="portfolio-content">
+
+                        <span class="portfolio-category">
+                            Mini E-Commerce
+                        </span>
+
+                        <h4>E-Commerce</h4>
+
+                        <p>
+
+                           A responsive eCommerce platform featuring product catalogs, shopping cart, secure checkout, and order tracking.
+
+                        </p>
+
+                        <div class="portfolio-tech">
+
+                            <span>Django</span>
+                            <span>Bootstrap</span>
+                            <span>SQLite</span>
+
+                        </div>
+
+                       
+
+                    </div>
+
+                </div>
+
+            </div>
+               <div class="col-lg-4 col-md-6">
+                          <div class="portfolio-card"data-aos="fade-right"
+     data-aos-duration="1100">
+                    <img src="{{ url_for('static', filename='images/ecotrackai.png') }}"
+                         class="portfolio-img"
+                         alt="E-Commerce">
+
+                    <div class="portfolio-content">
+
+                        <span class="portfolio-category">
+                           Smart Waste Management
+                        </span>
+
+                        <h4>Eco-Track-AI</h4>
+
+                        <p>
+
+                           An AI-powered sustainability platform that monitors carbon emissions, and provides smart insights for greener decision-making.
+
+                        </p>
+
+                        <div class="portfolio-tech">
+
+                            <span>Flask</span>
+                            <span>Bootstrap</span>
+                            <span>SQLite</span>
+
+                        </div>
+
+                       
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- ================= TECHNOLOGIES ================= -->
+
+<section id="technologies" class="technologies-section">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <span class="section-tag">
+                TECHNOLOGIES
+            </span>
+
+            <h2 class="section-title">
+                Technologies We Work With
+            </h2>
+
+            <p class="section-text mx-auto">
+
+                We leverage modern technologies to build scalable, secure,
+                and high-performance software solutions.
+
+            </p>
+
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Python -->
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <div class="tech-card">
+
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg">
+
+                    <h5>Python</h5>
+
+                </div>
+
+            </div>
+
+            <!-- Flask -->
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <div class="tech-card">
+
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg">
+
+                    <h5>Flask</h5>
+
+                </div>
+
+            </div>
+
+            <!-- Django -->
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <div class="tech-card">
+
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg">
+
+                    <h5>Django</h5>
+
+                </div>
+
+            </div>
+
+            <!-- HTML -->
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <div class="tech-card">
+
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg">
+
+                    <h5>HTML5</h5>
+
+                </div>
+
+            </div>
+
+            <!-- CSS -->
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <div class="tech-card">
+
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg">
+
+                    <h5>CSS3</h5>
+
+                </div>
+
+            </div>
+
+            <!-- JavaScript -->
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <div class="tech-card">
+
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg">
+
+                    <h5>JavaScript</h5>
+
+                </div>
+
+            </div>
+
+            <!-- Bootstrap -->
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <div class="tech-card">
+
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg">
+
+                    <h5>Bootstrap</h5>
+
+                </div>
+
+            </div>
+
+            <!-- MySQL -->
+
+            <div class="col-lg-3 col-md-4 col-6">
+
+                <div class="tech-card">
+
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg">
+
+                    <h5>MySQL</h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= CONTACT ================= -->
+
+<section id="contact" class="contact-section">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <span class="section-tag">
+                CONTACT US
+            </span>
+
+            <h2 class="section-title">
+                Let's Build Something Amazing Together
+            </h2>
+
+            <p class="section-text mx-auto">
+
+                Have a project in mind? Contact us today and let's discuss how
+                we can help grow your business.
+
+            </p>
+
+        </div>
+
+        <div class="row g-5 align-items-center">
+
+            <!-- Contact Form -->
+
+            <div class="col-lg-7">
+
+                <div class="contact-card">
+
+                    <form action="/contact" method="POST">
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-4">
+
+                                <input type="text"
+                                       class="form-control contact-input"
+                                       name="name"
+                                       placeholder="Full Name"
+                                       required>
+
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+
+                                <input type="email"
+                                       class="form-control contact-input"
+                                       name="email"
+                                       placeholder="Email Address"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-4">
+
+                                <input type="text"
+                                       class="form-control contact-input"
+                                       name="phone"
+                                       placeholder="Phone Number">
+
+                            </div>
+                           <div class="row">
+
+    <div class="col-md-6 mb-3">
+
+        <input
+            type="text"
+            name="company"
+            class="form-control contact-input"
+            placeholder="Company Name"
+            required>
+
+    </div>
+
+   
+
+</div>
+                            <div class="col-md-6 mb-4">
+
+                                <select class="form-select contact-input"
+                                        name="service">
+
+                                    <option selected>Select Service</option>
+                                    <option>Website Development</option>
+                                    <option>Mobile App Development</option>
+                                    <option>CRM Development</option>
+                                    <option>AI / ML Solution</option>
+                                    <option>Cloud Solution</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <textarea rows="6"
+                                      class="form-control contact-input"
+                                      name="message"
+                                      placeholder="Tell us about your project..."
+                                      required></textarea>
+
+                        </div>
+             
+                        <button class="btn btn-primary btn-lg">
+
+                            Send Message
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <!-- Company Details -->
+
+            <div class="col-lg-5">
+
+                <div class="contact-info">
+
+                    <h3>Pragu Tech Solutions</h3>
+
+                    <p>
+
+                        We provide innovative software solutions,
+                        AI-powered applications, CRM systems,
+                        websites and mobile applications.
+
+                    </p>
+
+                    <div class="info-box">
+
+                        <i class="fas fa-envelope"></i>
+
+                        <div>
+
+                            <h6>Email</h6>
+
+                            <span>contact@pragutech.com</span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="info-box">
+
+                        <i class="fas fa-phone"></i>
+
+                        <div>
+
+                            <h6>Phone</h6>
+
+                            <span>+91 98765 43210</span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="info-box">
+
+                        <i class="fas fa-location-dot"></i>
+
+                        <div>
+
+                            <h6>Address</h6>
+
+                            <span>Chennai, Tamil Nadu, India</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="py-4 text-center">
+
+    <div class="container">
+
+        <p class="mb-0">
+
+            © 2026 Pragu Tech Solutions. All Rights Reserved.
+
+        </p>
+
+    </div>
+
+</footer>
+
+<!-- Bootstrap -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- AOS -->
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script>
+AOS.init({
+    duration:1000,
+    once:false,
+});
+</script>
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+<script>
+
+document.querySelectorAll(".service-card").forEach(card=>{
+
+    card.addEventListener("mousemove",function(e){
+
+        const rect=this.getBoundingClientRect();
+
+        const x=e.clientX-rect.left;
+
+        const y=e.clientY-rect.top;
+
+        const centerX=rect.width/2;
+
+        const centerY=rect.height/2;
+
+        const rotateY=(x-centerX)/18;
+
+        const rotateX=(centerY-y)/18;
+
+        this.style.transform=
+        `perspective(1000px)
+         rotateX(${rotateX}deg)
+         rotateY(${rotateY}deg)
+         scale(1.04)`;
+
+    });
+
+    card.addEventListener("mouseleave",function(){
+
+        this.style.transform=
+        "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
+
+    });
+
+});
+
+</script>
+</body>
+</html>

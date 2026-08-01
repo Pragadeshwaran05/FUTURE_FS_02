@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+    <div>
+        <h1>⚙️ Settings</h1>
+        <p style="color:#9CA3AF;">Manage your CRM preferences</p>
+    </div>
+</div>
+
+<div class="dashboard-cards">
+
+    <!-- Admin Profile -->
+    <div class="setting-card">
+
+        <div class="setting-icon">👤</div>
+
+        <h3>Admin Profile</h3>
+
+        <p>Update your profile information.</p>
+
+        <a href="{{ url_for('admin_profile') }}" class="btn-primary">
+    Manage
+</a>
+
+    </div>
+
+    
+       <!-- Change Password -->
+<div class="setting-card">
+
+    <div class="setting-icon">🔒</div>
+
+    <h3>Change Password</h3>
+
+    <p>Keep your account secure.</p>
+
+    <a href="{{ url_for('change_password') }}" class="btn-primary">
+        Change
+    </a>
+
+
+    </div>
+
+    <!-- Theme -->
+    <div class="setting-card">
+
+        <div class="setting-icon">🌙</div>
+
+        <h3>Theme</h3>
+
+        <p>Dark mode enabled.</p>
+
+       <a href="{{ url_for('theme') }}" class="btn-primary">
+    Customize
+</a>
+
+    </div>
+
+    <!-- Backup -->
+    <div class="setting-card">
+
+        <div class="setting-icon">💾</div>
+
+        <h3>Backup</h3>
+
+        <p>Download your database backup.</p>
+
+       <a href="{{ url_for('backup_database') }}" class="btn-primary">
+    Download
+</a>
+
+</div>
+
+</div>
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,396 @@
+{% extends "base.html" %}
+
+{% block title %}Reports{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+
+    <div>
+        <h1>📊 Reports & Analytics</h1>
+        <p style="color:#9CA3AF;">
+            Business performance overview
+        </p>
+    </div>
+
+</div>
+
+<!-- Dashboard Cards -->
+
+<div class="dashboard-cards">
+
+    <div class="card">
+        <h2>{{ total_leads }}</h2>
+        <p>Total Leads</p>
+    </div>
+    <div class="card conversion-card">
+
+    <div class="card-icon">📈</div>
+
+    <h2>{{ conversion_rate }}%</h2>
+
+    <p>Conversion Rate</p>
+
+</div>
+    <div class="card">
+        <h2>{{ new_leads }}</h2>
+        <p>New Leads</p>
+    </div>
+
+    <div class="card">
+        <h2>{{ contacted }}</h2>
+        <p>Contacted</p>
+    </div>
+
+    <div class="card">
+        <h2>{{ followup }}</h2>
+        <p>Follow-up</p>
+    </div>
+
+    <div class="card">
+        <h2>{{ converted }}</h2>
+        <p>Converted</p>
+    </div>
+
+</div>
+
+<!-- Chart -->
+
+<div class="chart-card">
+
+    <h2>📊 Lead Status Overview</h2>
+
+  <div class="chart-container">
+    <canvas id="statusChart"></canvas>
+</div>
+
+</div>
+<div class="chart-card">
+
+    <h2>📈 Monthly Lead Growth</h2>
+
+    <div class="chart-container">
+
+        <canvas id="growthChart"></canvas>
+
+    </div>
+
+</div>
+<div class="chart-card">
+
+    <h2>🥧 Lead Sources</h2>
+
+    <div class="chart-container">
+
+        <canvas id="sourceChart"></canvas>
+
+    </div>
+
+</div>
+<div id="chart-data"
+     data-new="{{ new_leads }}"
+     data-contacted="{{ contacted }}"
+     data-followup="{{ followup }}"
+     data-converted="{{ converted }}"
+     data-source-labels='{{ source_labels|tojson }}'
+     data-source-counts='{{ source_counts|tojson }}'
+        data-growth-labels='{{ growth_labels|tojson }}'
+     data-growth-counts='{{ growth_counts|tojson }}'>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+const chartData = document.getElementById("chart-data");
+
+const newLeads = Number(chartData.dataset.new);
+const contacted = Number(chartData.dataset.contacted);
+const followup = Number(chartData.dataset.followup);
+const converted = Number(chartData.dataset.converted);
+
+const sourceLabels = JSON.parse(chartData.dataset.sourceLabels);
+const sourceCounts = JSON.parse(chartData.dataset.sourceCounts);
+const growthLabels = JSON.parse(chartData.dataset.growthLabels);
+const growthCounts = JSON.parse(chartData.dataset.growthCounts);
+
+    // ==========================
+    // BAR CHART
+    // ==========================
+
+    const ctx = document.getElementById("statusChart");
+
+    if (ctx) {
+
+        window.statusChart = new Chart(ctx, {
+
+            type: "bar",
+
+            data: {
+
+                labels: [
+                    "New",
+                    "Contacted",
+                    "Follow-up",
+                    "Converted"
+                ],
+
+                datasets: [{
+
+                    label: "Number of Leads",
+
+                    data: [
+    newLeads,
+    contacted,
+    followup,
+    converted
+                    ],
+
+                    backgroundColor: [
+                        "#3B82F6",
+                        "#F59E0B",
+                        "#8B5CF6",
+                        "#10B981"
+                    ],
+
+                    borderRadius: 10,
+                    borderSkipped: false,
+                    barThickness: 60
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    }
+
+                },
+
+                scales: {
+
+                    x: {
+
+                        grid: {
+
+                            display: false
+
+                        }
+
+                    },
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        ticks: {
+
+                            stepSize: 1
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+    // ==========================
+    // PIE CHART
+    // ==========================
+
+    const sourceCtx = document.getElementById("sourceChart");
+
+    if (sourceCtx) {
+
+        new Chart(sourceCtx, {
+
+            type: "pie",
+
+            data: {
+
+              labels: sourceLabels,
+
+                datasets: [{
+
+                   data: sourceCounts,
+                    backgroundColor: [
+
+                        "#3B82F6",
+                        "#10B981",
+                        "#F59E0B",
+                        "#8B5CF6",
+                        "#EF4444"
+
+                    ],
+
+                    borderWidth: 2,
+                    borderColor: "#1B2238"
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+
+                        position: "bottom",
+
+                        labels: {
+
+                            color: "#FFFFFF",
+
+                            font: {
+
+                                size: 14
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+        }
+
+    // ==========================
+    // MONTHLY GROWTH LINE CHART
+    // ==========================
+
+    const growthCtx = document.getElementById("growthChart");
+
+    if (growthCtx) {
+
+
+            new Chart(growthCtx, {
+
+    type: "line",
+
+    data: {
+
+        labels: growthLabels,
+
+        datasets: [{
+
+            label: "Monthly Leads",
+
+            data: growthCounts,
+
+            borderColor: "#3B82F6",
+
+            backgroundColor: "rgba(59,130,246,0.25)",
+
+            fill: true,
+
+            borderWidth: 4,
+
+            tension: 0.4,
+
+            pointRadius: 7,
+
+            pointHoverRadius: 10,
+
+            pointBackgroundColor: "#3B82F6",
+
+            pointBorderColor: "#ffffff",
+
+            pointBorderWidth: 2
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                labels: {
+
+                    color: "#ffffff"
+
+                }
+
+            }
+
+        },
+
+        scales: {
+
+            x: {
+
+                ticks: {
+
+                    color: "#D1D5DB"
+
+                },
+
+                grid: {
+
+                    color: "rgba(255,255,255,0.05)"
+
+                }
+
+            },
+
+            y: {
+
+                beginAtZero: true,
+
+                ticks: {
+
+                    stepSize: 1,
+
+                    color: "#D1D5DB"
+
+                },
+
+                grid: {
+
+                    color: "rgba(255,255,255,0.05)"
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+    }
+
+});
+
+</script>
+
+{% endblock %}

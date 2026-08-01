@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Lead{% endblock %}
+
+{% block content %}
+
+<h1>Edit Lead</h1>
+
+<p style="color:#9CA3AF;margin-bottom:30px;">
+Update customer information
+</p>
+
+<form method="POST">
+
+<div class="form-group">
+
+<label>Name</label>
+
+<input
+type="text"
+name="name"
+value="{{ lead[1] }}"
+required>
+
+</div>
+
+<div class="form-group">
+
+<label>Email</label>
+
+<input
+type="email"
+name="email"
+value="{{ lead[2] }}">
+
+</div>
+
+<div class="form-group">
+
+<label>Phone</label>
+
+<input
+type="text"
+name="phone"
+value="{{ lead[3] }}">
+
+</div>
+
+<div class="form-group">
+
+<label>Company</label>
+
+<input
+type="text"
+name="company"
+value="{{ lead[4] }}">
+
+</div>
+
+<div class="form-group">
+
+<label>Status</label>
+
+<select name="status">
+
+<option {% if lead[7]=='New' %}selected{% endif %}>New</option>
+
+<option {% if lead[7]=='Contacted' %}selected{% endif %}>Contacted</option>
+
+<option {% if lead[7]=='Follow-up' %}selected{% endif %}>Follow-up</option>
+
+<option {% if lead[7]=='Converted' %}selected{% endif %}>Converted</option>
+
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Requirement</label>
+
+<textarea
+rows="6"
+name="message">{{ lead[6] }}</textarea>
+
+</div>
+
+<button class="save-btn">
+
+Update Lead
+
+</button>
+
+</form>
+
+{% endblock %}

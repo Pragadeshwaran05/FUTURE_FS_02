@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | LeadFlow CRM{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+
+    <div>
+        <h1>Dashboard</h1>
+        <p style="color:#9CA3AF;">
+            Welcome back, Admin 👋
+        </p>
+    </div>
+
+    <div>
+
+        <span style="margin-right:20px;">
+            📅 {{ "Today" }}
+        </span>
+
+        <a href="/logout" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+<div class="dashboard-cards">
+
+    <div class="dashboard-card purple">
+
+        <h2>{{ total_leads }}</h2>
+
+        <p>Total Leads</p>
+
+    </div>
+
+    <div class="dashboard-card green">
+
+        <h2>{{ new_leads }}</h2>
+        <p>New Leads</p>
+
+    </div>
+
+    <div class="dashboard-card blue">
+
+        <h2>{{ contacted }}</h2>
+        <p>Contacted</p>
+
+    </div>
+
+    <div class="dashboard-card orange">
+
+        <h2>{{ converted }}</h2>
+        <p>Converted</p>
+
+    </div>
+
+</div>
+
+<div class="dashboard-grid">
+
+    <div class="chart-box">
+
+        <h2>Monthly Leads</h2>
+
+        <canvas id="leadChart"></canvas>
+
+    </div>
+
+    <div class="activity-box">
+
+        <h2>Recent Activity</h2>
+
+        <ul>
+
+            <li>No activities yet.</li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+{% endblock %}

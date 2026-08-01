@@ -1,0 +1,37 @@
+.conversion-card{
+
+    background: linear-gradient(135deg,#10B981,#059669);
+
+    color:white;
+
+    transition:.3s;
+
+}
+
+.conversion-card h2{
+
+    color:white;
+
+}
+
+.conversion-card p{
+
+    color:#E5E7EB;
+
+}
+
+.conversion-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 15px 35px rgba(16,185,129,.35);
+
+}
+
+.card-icon{
+
+    font-size:28px;
+
+    margin-bottom:10px;
+
+}

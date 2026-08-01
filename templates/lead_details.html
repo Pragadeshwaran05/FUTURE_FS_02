@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+
+{% block title %}Lead Details{% endblock %}
+
+{% block content %}
+
+<div class="lead-header">
+
+    <div>
+
+        <h1>{{ lead[1] }}</h1>
+
+        <p>Lead ID : #{{ lead[0] }}</p>
+
+    </div>
+
+    <div>
+
+        <span class="status-badge">
+
+            {{ lead[7] }}
+
+        </span>
+
+    </div>
+
+</div>
+
+
+
+<div class="details-grid">
+
+    <div class="info-card">
+
+        <h3>📞 Contact Details</h3>
+
+        <div class="info-item">
+
+            <label>Email</label>
+
+            <p>{{ lead[2] }}</p>
+
+        </div>
+
+        <div class="info-item">
+
+            <label>Phone</label>
+
+            <p>{{ lead[3] }}</p>
+
+        </div>
+
+        <div class="info-item">
+
+            <label>Company</label>
+
+            <p>{{ lead[4] }}</p>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="info-card">
+
+        <h3>📋 Lead Information</h3>
+
+        <div class="info-item">
+
+            <label>Source</label>
+
+            <p>{{ lead[5] }}</p>
+
+        </div>
+
+        <div class="info-item">
+
+            <label>Created</label>
+
+            <p>{{ lead[8] }}</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="info-card mt-4">
+
+    <h3>📝 Project Requirement</h3>
+
+   <table class="project-table">
+
+    <tr>
+        <th>💼 Service Required</th>
+        <td>{{ lead[9] or "Not Specified" }}</td>
+    </tr>
+
+    <tr>
+        <th>💰 Estimated Budget</th>
+        <td>{{ lead[10] or "Not Specified" }}</td>
+    </tr>
+
+    <tr>
+        <th>📋 Project Details</th>
+        <td style="white-space: pre-line;">
+            {{ lead[6] or "No project details provided." }}
+        </td>
+    </tr>
+
+</table>
+
+</div>
+
+<div class="info-card mt-4">
+
+<h3>🔄 Lead Status</h3>
+
+<form action="/update-status/{{ lead[0] }}" method="POST">
+
+<select name="status" class="status-select">
+
+<option {% if lead[7]=='New' %}selected{% endif %}>New</option>
+
+<option {% if lead[7]=='Contacted' %}selected{% endif %}>Contacted</option>
+
+<option {% if lead[7]=='Follow-up' %}selected{% endif %}>Follow-up</option>
+
+<option {% if lead[7]=='Converted' %}selected{% endif %}>Converted</option>
+
+</select>
+
+<button class="update-btn">
+
+Update Status
+
+</button>
+
+</form>
+
+</div>
+   <!-- End of Lead Status -->
+
+<!-- Follow-up Notes -->
+
+<div class="info-card mt-4">
+
+    <h3>📝 Follow-up Notes</h3>
+
+    <form action="/add-followup/{{ lead[0] }}" method="POST">
+
+        <textarea
+            name="note"
+            rows="4"
+            class="note-textarea"
+            placeholder="Write a follow-up note..."
+            required></textarea>
+
+        <div class="note-actions">
+            <button type="submit" class="note-btn">
+                <i class="fas fa-plus"></i> Add Note
+            </button>
+        </div>
+
+    </form>
+
+    {% if followups %}
+
+        {% for followup in followups %}
+
+
+<div class="note-card">
+
+    <div class="note-top">
+
+        <div class="note-left">
+
+            <div class="note-icon">
+                📝
+            </div>
+
+            <div>
+
+                <div class="note-title">
+                    Follow-up Note
+                </div>
+
+                <div class="note-date">
+                    📅 {{ followup[3] }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="note-message">
+        {{ followup[2] }}
+    </div>
+
+</div>
+
+{% endfor %}
+
+    {% else %}
+
+        <div class="empty-note">
+
+            <i class="fas fa-sticky-note"></i>
+
+            <h4>No Follow-up Notes</h4>
+
+            <p>Add your first follow-up note to keep track of customer interactions.</p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+<div style="margin-top:30px;">
+
+<a href="/leads" class="back-btn">
+
+← Back to Leads
+
+</a>
+
+</div>
+
+{% endblock %}
+
+

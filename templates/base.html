@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{% block title %}LeadFlow CRM{% endblock %}</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet"                                         
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#0B1020;
+color:white;
+display:flex;
+}
+
+/* Sidebar */
+
+.sidebar{
+
+width:260px;
+height:100vh;
+
+background:#171F34;
+
+padding:30px;
+
+position:fixed;
+
+left:0;
+top:0;
+}
+
+.logo{
+
+font-size:28px;
+
+font-weight:700;
+
+color:#8B5CF6;
+
+margin-bottom:50px;
+}
+
+.sidebar a{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+padding:15px;
+
+margin-bottom:10px;
+
+text-decoration:none;
+
+color:white;
+
+border-radius:12px;
+
+transition:.3s;
+}
+
+.sidebar a:hover{
+
+background:#8B5CF6;
+}
+
+.content{
+
+margin-left:260px;
+
+width:100%;
+
+padding:40px;
+}
+
+.topbar{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:40px;
+}
+
+.logout{
+
+background:#EF4444;
+
+padding:10px 18px;
+
+border-radius:10px;
+
+text-decoration:none;
+
+color:white;
+}
+
+.card{
+
+background:#171F34;
+
+border-radius:18px;
+
+padding:25px;
+}
+.dashboard-cards{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:25px;
+
+margin-bottom:35px;
+
+}
+
+.dashboard-card{
+
+padding:30px;
+
+border-radius:18px;
+
+color:white;
+
+transition:.3s;
+
+}
+
+.dashboard-card:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 10px 25px rgba(0,0,0,.3);
+
+}
+
+.dashboard-card h2{
+
+font-size:42px;
+
+margin-bottom:10px;
+
+}
+
+.dashboard-card p{
+
+font-size:17px;
+
+}
+
+.purple{
+
+background:linear-gradient(135deg,#7C3AED,#9333EA);
+
+}
+
+.green{
+
+background:linear-gradient(135deg,#10B981,#22C55E);
+
+}
+
+.blue{
+
+background:linear-gradient(135deg,#2563EB,#3B82F6);
+
+}
+
+.orange{
+
+background:linear-gradient(135deg,#EA580C,#F97316);
+
+}
+
+.dashboard-grid{
+
+display:grid;
+
+grid-template-columns:2fr 1fr;
+
+gap:30px;
+
+}
+
+.chart-box,
+.activity-box{
+
+background:#171F34;
+
+padding:30px;
+
+border-radius:20px;
+
+min-height:350px;
+
+}
+
+.chart-box h2,
+.activity-box h2{
+
+margin-bottom:25px;
+
+}
+
+/* ===========================
+   Lead Management
+=========================== */
+
+.add-btn{
+
+    background:linear-gradient(135deg,#8B5CF6,#6D28D9);
+    color:white;
+    text-decoration:none;
+    padding:12px 22px;
+    border-radius:10px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.add-btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+.table-container{
+
+    margin-top:30px;
+    background:#171F34;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 10px 25px rgba(0,0,0,.3);
+
+}
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+thead{
+
+    background:#202A44;
+
+}
+
+th{
+
+    padding:18px;
+    text-align:left;
+    color:#fff;
+    font-size:15px;
+
+}
+
+td{
+
+    padding:18px;
+    border-bottom:1px solid #2B3755;
+    color:#D1D5DB;
+
+}
+
+tbody tr:hover{
+
+    background:#1E293B;
+
+}
+.form-group{
+
+margin-bottom:22px;
+
+}
+
+.form-group label{
+
+display:block;
+margin-bottom:8px;
+font-weight:600;
+
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+
+width:100%;
+padding:14px;
+background:#171F34;
+border:1px solid #2B3755;
+border-radius:10px;
+color:white;
+font-size:15px;
+
+}
+
+.save-btn{
+
+background:#8B5CF6;
+padding:14px 30px;
+border:none;
+border-radius:10px;
+color:white;
+font-size:16px;
+cursor:pointer;
+
+}
+
+.save-btn:hover{
+
+background:#7C3AED;
+
+}
+
+.view-btn{
+
+background:#10B981;
+padding:8px 15px;
+border-radius:8px;
+color:white;
+text-decoration:none;
+margin-right:8px;
+
+}
+
+.view-btn:hover{
+
+opacity:.9;
+
+}
+
+/* Lead Details */
+
+.lead-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:30px;
+
+}
+
+.lead-header h1{
+
+font-size:36px;
+
+}
+
+.lead-header p{
+
+color:#9CA3AF;
+
+margin-top:5px;
+
+}
+
+.details-grid{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:25px;
+
+}
+
+.info-card{
+
+background:#171F34;
+
+padding:30px;
+
+border-radius:18px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+
+}
+
+.info-card h3{
+
+margin-bottom:25px;
+
+}
+
+.info-item{
+
+margin-bottom:20px;
+
+}
+
+.info-item label{
+
+display:block;
+
+color:#8B5CF6;
+
+font-size:14px;
+
+margin-bottom:6px;
+
+}
+
+.info-item p{
+
+font-size:17px;
+
+}
+
+.status-badge{
+
+background:#10B981;
+
+padding:10px 20px;
+
+border-radius:30px;
+
+font-weight:600;
+
+}
+
+.status-select{
+
+width:300px;
+
+padding:14px;
+
+background:#0B1020;
+
+border:1px solid #2B3755;
+
+color:white;
+
+border-radius:10px;
+
+margin-right:20px;
+
+}
+
+.update-btn{
+
+background:#8B5CF6;
+
+border:none;
+
+padding:14px 24px;
+
+border-radius:10px;
+
+color:white;
+
+cursor:pointer;
+
+}
+
+.back-btn{
+
+background:#334155;
+
+padding:12px 25px;
+
+border-radius:10px;
+
+text-decoration:none;
+
+color:white;
+
+}
+
+.mt-4{
+
+margin-top:25px;
+
+}
+
+/* Project Requirement */
+
+
+
+
+
+
+.requirement-item p{
+
+font-size:17px;
+
+margin-top:10px;
+
+color:#E5E7EB;
+
+}
+
+/* ===========================
+   Project Requirement Table
+=========================== */
+
+
+.project-table tr{
+
+    border-bottom:1px solid #2B3755;
+
+}
+
+.project-table tr:last-child{
+
+    border-bottom:none;
+
+}
+
+
+
+
+
+.project-table td:last-child{
+
+    white-space:pre-line;
+
+}
+/* ===========================
+   GitHub Style Table
+=========================== */
+
+.project-table{
+
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+    border:1px solid #374151;
+    border-radius:12px;
+    overflow:hidden;
+
+}
+
+.project-table th{
+
+    width:260px;
+
+    background:#1F2937;
+
+    color:#A78BFA;
+
+    text-align:left;
+
+    padding:18px;
+
+    border:1px solid #374151;
+
+    font-size:15px;
+
+    vertical-align:top;
+
+}
+
+.project-table td{
+
+    background:#111827;
+
+    color:#E5E7EB;
+
+    padding:18px;
+
+    border:1px solid #374151;
+
+    line-height:28px;
+
+    white-space:pre-line;
+
+}
+
+.project-table tr:hover td{
+
+    background:#172033;
+
+}
+
+.project-table tr:hover th{
+
+    background:#273244;
+
+}
+
+.note-textarea{
+    width:100%;
+    min-height:100px;
+    background:#111827;
+    color:#fff;
+    border:1px solid #374151;
+    border-radius:10px;
+    padding:14px;
+    font-size:15px;
+    resize:vertical;
+}
+
+.note-textarea::placeholder{
+    color:#9CA3AF;
+}
+
+.note-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:15px;
+}
+
+.note-btn{
+    background:linear-gradient(135deg,#7C3AED,#5B21B6);
+    color:#fff;
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+    min-width:120px;
+}
+
+.note-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(124,58,237,.35);
+}
+
+
+
+.note-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:12px;
+
+}
+
+
+
+
+
+
+.note-message{
+
+    color:#E5E7EB;
+
+    line-height:1.7;
+
+}
+.note-card{
+    background:#111827;
+    border:1px solid #374151;
+    border-radius:12px;
+    padding:18px;
+    margin-top:18px;
+    transition:0.3s ease;
+}
+
+.note-card:hover{
+    border-color:#7C3AED;
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(124,58,237,.20);
+}
+
+.note-header{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:15px;
+}
+
+.note-icon{
+    width:45px;
+    height:45px;
+    background:linear-gradient(135deg,#7C3AED,#5B21B6);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    color:#fff;
+    flex-shrink:0;
+}
+
+.note-info{
+    display:flex;
+    flex-direction:column;
+}
+
+.note-title{
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+}
+
+.note-date{
+    color:#9CA3AF;
+    font-size:13px;
+    margin-top:3px;
+}
+
+.note-message{
+    color:#E5E7EB;
+    line-height:1.8;
+    padding-left:60px;
+}
+
+.empty-note{
+    text-align:center;
+    padding:40px 20px;
+    color:#9CA3AF;
+}
+
+.empty-note i{
+    font-size:40px;
+    color:#7C3AED;
+    margin-bottom:15px;
+}
+
+.empty-note h4{
+    color:white;
+    margin-bottom:8px;
+}
+
+.note-card{
+    background:#111827;
+    border:1px solid #374151;
+    border-radius:10px;
+    padding:16px 20px;
+    margin-top:15px;
+    transition:.3s;
+}
+
+.note-card:hover{
+    border-color:#7C3AED;
+    transform:translateY(-2px);
+}
+
+.note-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.note-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.note-icon{
+    width:42px;
+    height:42px;
+    background:#7C3AED;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-size:18px;
+}
+
+.note-title{
+    color:white;
+    font-weight:600;
+    font-size:16px;
+}
+
+.note-date{
+    color:#9CA3AF;
+    font-size:13px;
+    margin-top:3px;
+}
+
+.note-message{
+    color:#E5E7EB;
+    margin-left:56px;
+    line-height:1.7;
+}
+
+.action-buttons{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.view-btn,
+.edit-btn,
+.delete-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 14px;
+    border-radius:8px;
+    text-decoration:none;
+    color:white;
+    font-size:13px;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.view-btn{
+    background:#10B981;
+}
+
+.view-btn:hover{
+    background:#059669;
+}
+
+.edit-btn{
+    background:#3B82F6;
+}
+
+.edit-btn:hover{
+    background:#2563EB;
+}
+
+.delete-btn{
+    background:#EF4444;
+}
+
+.delete-btn:hover{
+    background:#DC2626;
+}
+
+.view-btn i,
+.edit-btn i,
+.delete-btn i{
+    font-size:12px;
+}
+.chart-card{
+    background:#1B2238;
+    border-radius:16px;
+    padding:25px;
+    margin-top:30px;
+    border:1px solid rgba(255,255,255,.05);
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+}
+.chart-container{
+    height:450px;
+}
+.chart-container{
+    position:relative;
+    width:100%;
+    height:400px;
+}
+
+</style>
+
+</head>
+
+<body class="{{ theme }}">
+<div class="sidebar">
+
+<div class="logo">
+LeadFlow CRM
+</div>
+
+<a href="/dashboard">
+<i class="fa-solid fa-chart-line"></i>
+Dashboard
+</a>
+
+<a href="/leads">
+<i class="fa-solid fa-users"></i>
+Leads
+</a>
+
+<a href="/customers">
+    <i class="fas fa-users"></i>
+    Customers
+</a>
+
+<a href="/reports">
+    <i class="fas fa-chart-pie"></i>
+    Reports
+</a>
+
+<a href="{{ url_for('settings') }}">
+    <i class="fas fa-cog"></i> Settings
+</a>
+
+<a href="/logout">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</a>
+
+</div>
+
+<div class="content">
+
+{% block content %}
+
+{% endblock %}
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx=document.getElementById('leadChart');
+
+if(ctx){
+
+new Chart(ctx,{
+
+type:'line',
+
+data:{
+
+labels:['Jan','Feb','Mar','Apr','May','Jun'],
+
+datasets:[{
+
+label:'Leads',
+
+data:[5,12,18,10,20,28],
+
+borderColor:'#8B5CF6',
+
+backgroundColor:'rgba(139,92,246,.15)',
+
+fill:true,
+
+tension:.4
+
+}]
+
+}
+
+});
+
+}
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+
+</html>

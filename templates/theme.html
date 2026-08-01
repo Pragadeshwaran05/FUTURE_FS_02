@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Theme Settings{% endblock %}
+
+{% block content %}
+
+<div class="topbar">
+    
+    <h1>🎨 Theme Settings</h1>
+    <p>Customize the appearance of your CRM</p>
+</div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="success-alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<div class="dashboard-cards">
+
+    <!-- Dark Theme -->
+    <div class="setting-card">
+
+        <div class="setting-icon">🌙</div>
+
+        <h3>Dark Theme</h3>
+
+        <p>Professional dark appearance.</p>
+
+        <form method="POST">
+            <input type="hidden" name="theme" value="dark">
+
+            <button type="submit" class="btn-primary">
+                Apply
+            </button>
+        </form>
+
+    </div>
+
+    <!-- Light Theme -->
+    <div class="setting-card">
+
+        <div class="setting-icon">☀️</div>
+
+        <h3>Light Theme</h3>
+
+        <p>Clean and bright interface.</p>
+
+        <form method="POST">
+            <input type="hidden" name="theme" value="light">
+
+            <button type="submit" class="btn-primary">
+                Apply
+            </button>
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
