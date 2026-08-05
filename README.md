@@ -144,18 +144,53 @@ http://127.0.0.1:5000
 ---
 
 ## 📸 Screenshots
+# 📸 Project Screenshots
 
-You can add screenshots of:
+## 🏠 Home Page
 
-- Home Page
-- Dashboard
-- Login
-- Leads
-- Customers
-- Reports
-- Settings
+![Home Page](screenshots/home.png)
 
 ---
+
+## 🔐 Admin Login
+
+![Admin Login](screenshots/login.png)
+
+---
+
+## 📊 Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+---
+
+## 👥 Lead Management
+
+![Lead Management](screenshots/leads.png)
+
+---
+
+## 👤 Customer Management
+
+![Customer Management](screenshots/customers.png)
+
+---
+
+## 📈 Reports
+
+![Reports](screenshots/reports.png)
+
+---
+
+## ⚙️ Settings
+
+![Settings](screenshots/settings.png)
+
+---
+
+## 📞 Contact Page
+
+![Contact Page](screenshots/contact.png)
 
 ## 🚀 Future Enhancements
 
