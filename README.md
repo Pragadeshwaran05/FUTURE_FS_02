@@ -224,3 +224,5 @@ This project is developed for educational and internship purposes.
 ---
 
 ⭐ If you like this project, consider giving it a star on GitHub.
+
+Last Updated: August 2026
