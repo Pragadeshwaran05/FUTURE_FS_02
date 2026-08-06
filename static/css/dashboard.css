@@ -35,3 +35,106 @@
     margin-bottom:10px;
 
 }
+/* ==========================================
+   Dashboard Theme Support
+========================================== */
+
+/* -------- DARK THEME -------- */
+
+body.dark .chart-box,
+body.dark .activity-box{
+    background:#1B2238;
+    color:#ffffff;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+
+body.dark .activity-box li{
+    color:#D1D5DB;
+}
+
+/* -------- LIGHT THEME -------- */
+
+body.light .chart-box,
+body.light .activity-box{
+    background:#ffffff !important;
+    color:#111827 !important;
+    border:1px solid #E5E7EB;
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+}
+
+
+
+body.light .activity-box li{
+    color:#374151 !important;
+}
+
+
+.activity-list{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.activity-item{
+    display:flex;
+    gap:15px;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:12px;
+}
+
+body.dark .activity-item{
+    background:#273244;
+}
+
+body.light .activity-item{
+    background:#F3F4F6;
+}
+
+.activity-icon{
+    font-size:24px;
+}
+
+.activity-content strong{
+    display:block;
+    font-size:16px;
+    margin-bottom:4px;
+}
+
+body.dark .activity-content strong{
+    color:#ffffff;
+}
+
+body.light .activity-content strong{
+    color:#111827;
+}
+
+.activity-content p{
+    margin:4px 0;
+}
+
+body.dark .activity-content p{
+    color:#D1D5DB;
+}
+
+body.light .activity-content p{
+    color:#4B5563;
+}
+
+.activity-content small{
+    color:#9CA3AF;
+}
+.activity-box{
+    background:#ffffff;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+body.dark .activity-box{
+    background:#1B2238;
+}
+body{
+    overflow-x: hidden;
+}

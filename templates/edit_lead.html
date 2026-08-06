@@ -7,89 +7,101 @@
 <h1>Edit Lead</h1>
 
 <p style="color:#9CA3AF;margin-bottom:30px;">
-Update customer information
+    Update customer information
 </p>
 
 <form method="POST">
 
-<div class="form-group">
+    <div class="form-group">
 
-<label>Name</label>
+        <label>Name</label>
 
-<input
-type="text"
-name="name"
-value="{{ lead[1] }}"
-required>
+        <input
+            type="text"
+            name="name"
+            value="{{ lead['name'] }}"
+            required>
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label>Email</label>
+        <label>Email</label>
 
-<input
-type="email"
-name="email"
-value="{{ lead[2] }}">
+        <input
+            type="email"
+            name="email"
+            value="{{ lead['email'] }}">
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label>Phone</label>
+        <label>Phone</label>
 
-<input
-type="text"
-name="phone"
-value="{{ lead[3] }}">
+        <input
+            type="text"
+            name="phone"
+            value="{{ lead['phone'] }}">
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label>Company</label>
+        <label>Company</label>
 
-<input
-type="text"
-name="company"
-value="{{ lead[4] }}">
+        <input
+            type="text"
+            name="company"
+            value="{{ lead['company'] }}">
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label>Status</label>
+        <label>Status</label>
 
-<select name="status">
+        <select name="status">
 
-<option {% if lead[7]=='New' %}selected{% endif %}>New</option>
+            <option value="New"
+                {% if lead['status'] == 'New' %}selected{% endif %}>
+                New
+            </option>
 
-<option {% if lead[7]=='Contacted' %}selected{% endif %}>Contacted</option>
+            <option value="Contacted"
+                {% if lead['status'] == 'Contacted' %}selected{% endif %}>
+                Contacted
+            </option>
 
-<option {% if lead[7]=='Follow-up' %}selected{% endif %}>Follow-up</option>
+            <option value="Follow-up"
+                {% if lead['status'] == 'Follow-up' %}selected{% endif %}>
+                Follow-up
+            </option>
 
-<option {% if lead[7]=='Converted' %}selected{% endif %}>Converted</option>
+            <option value="Converted"
+                {% if lead['status'] == 'Converted' %}selected{% endif %}>
+                Converted
+            </option>
 
-</select>
+        </select>
 
-</div>
+    </div>
 
-<div class="form-group">
+    <div class="form-group">
 
-<label>Requirement</label>
+        <label>Requirement</label>
 
-<textarea
-rows="6"
-name="message">{{ lead[6] }}</textarea>
+        <textarea
+            rows="6"
+            name="message">{{ lead['message'] }}</textarea>
 
-</div>
+    </div>
 
-<button class="save-btn">
+    <button class="save-btn">
 
-Update Lead
+        Update Lead
 
-</button>
+    </button>
 
 </form>
 

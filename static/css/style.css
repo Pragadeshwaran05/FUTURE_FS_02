@@ -245,17 +245,78 @@ body{
 
 .dashboard-card{
 
-    background:#141B2D;
-
     border:1px solid rgba(255,255,255,.08);
 
-    border-radius:25px;
+    border-radius:20px;
 
     padding:30px;
 
-    box-shadow:0 0 40px rgba(139,92,246,.2);
+    min-height:150px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    color:#fff;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.18);
+
+    transition:.3s;
+
 }
 
+.dashboard-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 16px 35px rgba(0,0,0,.25);
+
+}
+
+.dashboard-card h2{
+
+    font-size:54px;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+
+    color:#ffffff;
+
+}
+
+.dashboard-card p{
+
+    font-size:22px;
+
+    color:#ffffff;
+
+}
+.purple{
+
+    background:linear-gradient(135deg,#7C3AED,#A855F7);
+
+}
+
+.green{
+
+    background:linear-gradient(135deg,#9ee2cc,#9ee2cc);
+
+}
+
+.blue{
+
+    background:linear-gradient(135deg,#2563EB,#3B82F6);
+
+}
+
+.orange{
+
+    background:linear-gradient(135deg,#EA580C,#F97316);
+
+}
 .dashboard-header{
 
     margin-bottom:30px;
@@ -3680,3 +3741,283 @@ body.dark-theme{
     box-shadow:0 30px 60px rgba(37,99,235,.25);
 
 }
+/* ==========================================
+   THEME SUPPORT
+========================================== */
+
+/* ---------- DARK THEME ---------- */
+
+body.dark{
+    background:#374a88;
+    color:white;
+}
+
+body.dark .content{
+    background:#0B1020;
+    color:white;
+}
+
+body.dark .sidebar{
+    background:#171F34;
+}
+
+body.dark .card,
+body.dark .info-card,
+body.dark .table-container,
+body.dark .chart-card,
+body.dark .setting-card{
+    background:#171F34;
+    color:white;
+}
+
+body.dark table{
+    color:white;
+}
+
+body.dark th{
+    background:#202A44;
+    color:white;
+}
+
+body.dark td{
+    background:#171F34;
+    color:#D1D5DB;
+}
+
+/* ---------- LIGHT THEME ---------- */
+
+body.light{
+    background:#F3F4F6;
+    color:#111827;
+}
+
+body.light .content{
+    background:#F3F4F6;
+    color:#111827;
+}
+
+body.light .sidebar{
+    background:#171F34;
+}
+
+body.light .card,
+body.light .info-card,
+body.light .table-container,
+body.light .chart-card,
+body.light .setting-card{
+    background:white;
+    color:#111827;
+}
+
+body.light table{
+    background:white;
+}
+
+body.light th{
+    background:#E5E7EB;
+    color:#111827;
+}
+
+body.light td{
+    background:white;
+    color:#374151;
+}
+
+body.light input,
+body.light textarea,
+body.light select{
+    background:white;
+    color:#111827;
+    border:1px solid #D1D5DB;
+}
+/* Dark Theme */
+body.dark .setting-card h3{
+    color:#ffffff !important;
+}
+
+body.dark .setting-card p{
+    color:#D1D5DB !important;
+}
+
+/* Light Theme */
+body.light .setting-card h3{
+    color:#111827;
+}
+
+body.light .setting-card p{
+    color:#6B7280;
+}
+/* ==========================
+   LIGHT THEME SIDEBAR
+========================== */
+
+body.light .sidebar{
+    background:#FFFFFF !important;
+    border-right:1px solid #E5E7EB;
+}
+
+body.light .sidebar h2,
+body.light .sidebar .logo{
+    color:#2563EB !important;
+}
+
+body.light .sidebar a{
+    color:#374151 !important;
+}
+
+body.light .sidebar a:hover{
+    background:#F3F4F6 !important;
+}
+
+body.light .sidebar a.active{
+    background:#2563EB !important;
+    color:white !important;
+}
+/* ==========================================
+   LIGHT THEME TEXT COLORS
+========================================== */
+
+body.light h1,
+body.light h2,
+body.light h3,
+body.light h4,
+body.light h5,
+body.light h6{
+    color:#111827 !important;
+}
+
+body.light p,
+body.light span,
+body.light label{
+    color:#4B5563 !important;
+}
+
+/* Dashboard Cards */
+body.light .dashboard-card h3,
+body.light .dashboard-card p{
+    color:#111827 !important;
+}
+
+/* Statistics Cards */
+body.light .stat-card h3,
+body.light .stat-card p{
+    color:#111827 !important;
+}
+
+/* Report Cards */
+body.light .report-card h3,
+body.light .report-card p{
+    color:#111827 !important;
+}
+
+/* Chart Cards */
+body.light .chart-card h3{
+    color:#111827 !important;
+}
+
+/* Setting Cards */
+body.light .setting-card h3{
+    color:#111827 !important;
+}
+
+body.light .setting-card p{
+    color:#6B7280 !important;
+}
+body.light .chart-card{
+    background:#ffffff !important;
+    color:#111827 !important;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+body.light .chart-card h2{
+    color:#111827 !important;
+}
+
+
+
+
+
+
+.activity-list{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.activity-item{
+    display:flex;
+    gap:15px;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:12px;
+}
+
+body.dark .activity-item{
+    background:#273244;
+}
+
+body.light .activity-item{
+    background:#F3F4F6;
+}
+
+.activity-icon{
+    font-size:24px;
+}
+
+.activity-content strong{
+    display:block;
+    font-size:16px;
+    margin-bottom:4px;
+}
+
+body.dark .activity-content strong{
+    color:#ffffff;
+}
+
+body.light .activity-content strong{
+    color:#111827;
+}
+
+.activity-content p{
+    margin:4px 0;
+}
+
+body.dark .activity-content p{
+    color:#D1D5DB;
+}
+
+body.light .activity-content p{
+    color:#4B5563;
+}
+
+.activity-content small{
+    color:#9CA3AF;
+}
+.activity-box{
+    background:#ffffff;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+body.dark .activity-box{
+    background:#1B2238;
+}
+.activity-item{
+    display:flex;
+    gap:15px;
+    align-items:flex-start;
+    padding:15px 0;
+    border-bottom:1px solid rgba(0,0,0,.08);
+}
+
+body.dark .activity-item{
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.activity-item:last-child{
+    border-bottom:none;
+}
+body{
+    overflow-x: hidden;
+} 

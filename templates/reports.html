@@ -99,6 +99,12 @@
 </div>
 
 <script>
+    const isDarkTheme = document.body.classList.contains("dark");
+
+const textColor = isDarkTheme ? "#FFFFFF" : "#111827";
+const gridColor = isDarkTheme
+    ? "rgba(255,255,255,0.05)"
+    : "rgba(0,0,0,0.08)";
     document.addEventListener("DOMContentLoaded", function () {
 
 const chartData = document.getElementById("chart-data");
@@ -257,7 +263,7 @@ const growthCounts = JSON.parse(chartData.dataset.growthCounts);
 
                         labels: {
 
-                            color: "#FFFFFF",
+                           color: textColor,
 
                             font: {
 
@@ -281,102 +287,128 @@ const growthCounts = JSON.parse(chartData.dataset.growthCounts);
     // MONTHLY GROWTH LINE CHART
     // ==========================
 
-    const growthCtx = document.getElementById("growthChart");
+// ==========================
+// MONTHLY GROWTH LINE CHART
+// ==========================
 
-    if (growthCtx) {
+const growthCtx = document.getElementById("growthChart");
 
+if (growthCtx) {
 
-            new Chart(growthCtx, {
+    const darkTheme = document.body.classList.contains("dark");
 
-    type: "line",
+    new Chart(growthCtx, {
 
-    data: {
+        type: "line",
 
-        labels: growthLabels,
+        data: {
 
-        datasets: [{
+            labels: growthLabels,
 
-            label: "Monthly Leads",
+            datasets: [{
 
-            data: growthCounts,
+                label: "Monthly Leads",
 
-            borderColor: "#3B82F6",
+                data: growthCounts,
 
-            backgroundColor: "rgba(59,130,246,0.25)",
+                borderColor: "#3B82F6",
 
-            fill: true,
+                backgroundColor: darkTheme
+                    ? "rgba(59,130,246,0.20)"
+                    : "rgba(59,130,246,0.10)",
 
-            borderWidth: 4,
+                fill: true,
 
-            tension: 0.4,
+                borderWidth: 4,
 
-            pointRadius: 7,
+                tension: 0.4,
 
-            pointHoverRadius: 10,
+                pointRadius: 6,
 
-            pointBackgroundColor: "#3B82F6",
+                pointHoverRadius: 8,
 
-            pointBorderColor: "#ffffff",
+                pointBackgroundColor: "#3B82F6",
 
-            pointBorderWidth: 2
+                pointBorderColor: "#ffffff",
 
-        }]
+                pointBorderWidth: 2
 
-    },
-
-    options: {
-
-        responsive: true,
-
-        maintainAspectRatio: false,
-
-        plugins: {
-
-            legend: {
-
-                labels: {
-
-                    color: "#ffffff"
-
-                }
-
-            }
+            }]
 
         },
 
-        scales: {
+        options: {
 
-            x: {
+            responsive: true,
 
-                ticks: {
+            maintainAspectRatio: false,
 
-                    color: "#D1D5DB"
+            plugins: {
 
-                },
+                legend: {
 
-                grid: {
+                    labels: {
 
-                    color: "rgba(255,255,255,0.05)"
+                        color: darkTheme ? "#FFFFFF" : "#111827",
+
+                        font: {
+                            size: 14,
+                            weight: "bold"
+                        }
+
+                    }
 
                 }
 
             },
 
-            y: {
+            scales: {
 
-                beginAtZero: true,
+                x: {
 
-                ticks: {
+                    ticks: {
 
-                    stepSize: 1,
+                        color: darkTheme ? "#D1D5DB" : "#111827",
 
-                    color: "#D1D5DB"
+                        font: {
+                            size: 13
+                        }
+
+                    },
+
+                    grid: {
+
+                        color: darkTheme
+                            ? "rgba(255,255,255,0.08)"
+                            : "rgba(0,0,0,0.08)"
+
+                    }
 
                 },
 
-                grid: {
+                y: {
 
-                    color: "rgba(255,255,255,0.05)"
+                    beginAtZero: true,
+
+                    ticks: {
+
+                        stepSize: 1,
+
+                        color: darkTheme ? "#D1D5DB" : "#111827",
+
+                        font: {
+                            size: 13
+                        }
+
+                    },
+
+                    grid: {
+
+                        color: darkTheme
+                            ? "rgba(255,255,255,0.08)"
+                            : "rgba(0,0,0,0.08)"
+
+                    }
 
                 }
 
@@ -384,11 +416,9 @@ const growthCounts = JSON.parse(chartData.dataset.growthCounts);
 
         }
 
-    }
+    });
 
-});
-    }
-
+}
 });
 
 </script>

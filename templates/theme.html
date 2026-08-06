@@ -29,14 +29,20 @@
 
         <p>Professional dark appearance.</p>
 
-        <form method="POST">
-            <input type="hidden" name="theme" value="dark">
+       <form method="POST">
+    <input type="hidden" name="theme" value="dark">
 
-            <button type="submit" class="btn-primary">
-                Apply
-            </button>
-        </form>
-
+    <button
+        type="submit"
+        class="btn-primary"
+        {% if current_theme.get("theme","dark") == "dark" %}disabled{% endif %}>
+        {% if current_theme.get("theme","dark") == "dark" %}
+            ✓ Active
+        {% else %}
+            Apply
+        {% endif %}
+    </button>
+</form>
     </div>
 
     <!-- Light Theme -->
@@ -47,14 +53,20 @@
         <h3>Light Theme</h3>
 
         <p>Clean and bright interface.</p>
+<form method="POST">
+    <input type="hidden" name="theme" value="light">
 
-        <form method="POST">
-            <input type="hidden" name="theme" value="light">
-
-            <button type="submit" class="btn-primary">
-                Apply
-            </button>
-        </form>
+    <button
+        type="submit"
+        class="btn-primary"
+        {% if current_theme.get("theme","dark") == "light" %}disabled{% endif %}>
+        {% if current_theme.get("theme","dark") == "light" %}
+            ✓ Active
+        {% else %}
+            Apply
+        {% endif %}
+    </button>
+</form>
 
     </div>
 

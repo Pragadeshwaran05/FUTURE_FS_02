@@ -1,21 +1,46 @@
 from flask import Flask, render_template, request, redirect, session, flash
-import sqlite3
 from werkzeug.security import check_password_hash
 from flask import Flask, render_template, request, redirect, session, flash
-from database import create_tables
-from auth import create_admin
 from flask import send_file 
 import zipfile
 import os
-DATABASE = "leadflow.db"
+from collections import Counter
+import json
+from bson import json_util
+from mongodb import admin_collection, leads_collection
+from bson import ObjectId
+
+from bson import ObjectId
+from datetime import datetime
+
+from mongodb import (
+    admin_collection,
+    leads_collection,
+    followups_collection,
+    settings_collection,
+    admin_profile_collection,
+    activities_collection
+)
+
 
 app = Flask(__name__)
 app.secret_key = "leadflow_secret_key"
 
-# Create database and default admin
-create_tables()
-create_admin()
+# MongoDB Initialization
 
+def add_activity(action, description, icon):
+
+    activities_collection.insert_one({
+
+        "action": action,
+
+        "description": description,
+
+        "icon": icon,
+
+        "created_at": datetime.utcnow()
+
+    })
 
 # ===========================
 # Home Page
@@ -37,19 +62,9 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        conn = sqlite3.connect(DATABASE)
-        cursor = conn.cursor()
+        admin = admin_collection.find_one({"username": username})
 
-        cursor.execute(
-            "SELECT * FROM admin WHERE username=?",
-            (username,)
-        )
-
-        admin = cursor.fetchone()
-
-        conn.close()
-
-        if admin and check_password_hash(admin[2], password):
+        if admin and check_password_hash(admin["password"], password):
 
             session["admin"] = username
 
@@ -57,9 +72,7 @@ def login():
 
         flash("Invalid Username or Password")
 
-    return render_template("login.html")
-
-
+    return render_template("login.html") 
 # ===========================
 # Dashboard
 # ===========================
@@ -69,35 +82,36 @@ def dashboard():
     if "admin" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("leadflow.db")
-    cursor = conn.cursor()
-
     # Total Leads
-    cursor.execute("SELECT COUNT(*) FROM leads")
-    total_leads = cursor.fetchone()[0]
+    total_leads = leads_collection.count_documents({})
 
     # New Leads
-    cursor.execute("SELECT COUNT(*) FROM leads WHERE status='New'")
-    new_leads = cursor.fetchone()[0]
+    new_leads = leads_collection.count_documents({
+        "status": "New"
+    })
 
-    # Contacted
-    cursor.execute("SELECT COUNT(*) FROM leads WHERE status='Contacted'")
-    contacted = cursor.fetchone()[0]
+    # Contacted Leads
+    contacted = leads_collection.count_documents({
+        "status": "Contacted"
+    })
 
-    # Converted
-    cursor.execute("SELECT COUNT(*) FROM leads WHERE status='Converted'")
-    converted = cursor.fetchone()[0]
-
-    conn.close()
-
+    # Converted Leads
+    converted = leads_collection.count_documents({
+        "status": "Converted"
+    })
+    activities = list(
+    activities_collection.find()
+    .sort("created_at", -1)
+    .limit(5)
+    )
     return render_template(
         "dashboard.html",
         total_leads=total_leads,
         new_leads=new_leads,
         contacted=contacted,
-        converted=converted
+        converted=converted,
+        activities=activities
     )
-
 # ===========================
 # Logout
 # ===========================
@@ -114,40 +128,32 @@ def leads():
     if "admin" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("leadflow.db")
-    cursor = conn.cursor()
+    # Fetch all leads from MongoDB
+    leads = list(
+        leads_collection.find().sort("_id", -1)
+    )
 
-    cursor.execute("SELECT * FROM leads ORDER BY id DESC")
-
-    leads = cursor.fetchall()
-
-    conn.close()
-
-    return render_template("leads.html", leads=leads)
-
-@app.route("/lead/<int:id>")
+    return render_template(
+        "leads.html",
+        leads=leads
+    )
+@app.route("/lead/<id>")
 def lead_details(id):
 
     if "admin" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("leadflow.db")
-    cursor = conn.cursor()
+    # Fetch lead from MongoDB
+    lead = leads_collection.find_one(
+        {"_id": ObjectId(id)}
+    )
 
-    # Fetch Lead Details
-    cursor.execute("SELECT * FROM leads WHERE id=?", (id,))
-    lead = cursor.fetchone()
-
-    # Fetch Follow-up Notes
-    cursor.execute("""
-        SELECT * FROM followups
-        WHERE lead_id=?
-        ORDER BY created_at DESC
-    """, (id,))
-
-    followups = cursor.fetchall()
-
-    conn.close()
+    # Fetch follow-up notes
+    followups = list(
+        followups_collection.find(
+            {"lead_id": id}
+        ).sort("created_at", -1)
+    )
 
     return render_template(
         "lead_details.html",
@@ -155,15 +161,15 @@ def lead_details(id):
         followups=followups
     )
 
-@app.route("/edit-lead/<int:id>", methods=["GET", "POST"])
+@app.route("/edit-lead/<id>", methods=["GET", "POST"])
 def edit_lead(id):
 
     if "admin" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("leadflow.db")
-    cursor = conn.cursor()
-
+    # Get lead from MongoDB
+    lead = leads_collection.find_one({"_id": ObjectId(id)})
+    old_status = lead["status"]
     if request.method == "POST":
 
         name = request.form["name"]
@@ -173,90 +179,62 @@ def edit_lead(id):
         status = request.form["status"]
         message = request.form["message"]
 
-        cursor.execute("""
-            UPDATE leads
-            SET
-                name=?,
-                email=?,
-                phone=?,
-                company=?,
-                status=?,
-                message=?
-            WHERE id=?
-        """, (
-            name,
-            email,
-            phone,
-            company,
-            status,
-            message,
-            id
-        ))
-        # ==========================
-# Theme Settings
-# ==========================
-
-        cursor.execute("""
-CREATE TABLE IF NOT EXISTS settings(
-
-    id INTEGER PRIMARY KEY,
-
-    theme TEXT
-
+        leads_collection.update_one(
+            {"_id": ObjectId(id)},
+            {
+                "$set": {
+                    "name": name,
+                    "email": email,
+                    "phone": phone,
+                    "company": company,
+                    "status": status,
+                    "message": message
+                }
+            }
+        )
+        add_activity(
+    "Lead Updated",
+    f"{name}'s details were updated.",
+    "✏️"
 )
-""")
-
-        cursor.execute("""
-INSERT OR IGNORE INTO settings(
-    id,
-    theme
-)
-VALUES(
-    1,
-    'dark'
-)
-""")
-
-
-        
-        conn.commit()
-        conn.close()
-
+        if old_status != "Converted" and status == "Converted":
+              add_activity(
+        "Lead Converted",
+        f"{name} was converted into a customer.",
+        "🎉"
+            )
         return redirect(f"/lead/{id}")
-
-    cursor.execute("SELECT * FROM leads WHERE id=?", (id,))
-    lead = cursor.fetchone()
-
-    conn.close()
 
     return render_template(
         "edit_lead.html",
         lead=lead
     )
 
-@app.route("/delete-lead/<int:id>")
+
+@app.route("/delete-lead/<id>")
 def delete_lead(id):
 
     if "admin" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("leadflow.db")
+    lead = leads_collection.find_one({"_id": ObjectId(id)})
 
-    cursor = conn.cursor()
-
-    cursor.execute(
-        "DELETE FROM leads WHERE id=?",
-        (id,)
+    if lead:
+        add_activity(
+        "Lead Deleted",
+        f"{lead['name']} was deleted.",
+        "🗑️"
     )
 
-    conn.commit()
-
-    conn.close()
-
+    leads_collection.delete_one(
+    {"_id": ObjectId(id)}
+)
     return redirect("/leads")
 # ===========================
 # Run Flask
 # ===========================
+from datetime import datetime
+
 @app.route("/add-lead", methods=["GET", "POST"])
 def add_lead():
 
@@ -275,33 +253,31 @@ def add_lead():
         status = request.form["status"]
         message = request.form["message"]
 
-        conn = sqlite3.connect("leadflow.db")
-        cursor = conn.cursor()
+        leads_collection.insert_one({
 
-        cursor.execute("""
-INSERT INTO leads
-(name, email, phone, company, service, budget, source, status, message)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-""", (
-    name,
-    email,
-    phone,
-    company,
-    service,
-    budget,
-    source,
-    status,
-    message
-))
+            "name": name,
+            "email": email,
+            "phone": phone,
+            "company": company,
+            "source": source,
+            "service": service,
+            "budget": budget,
+            "status": status,
+            "message": message,
+            "created_at": datetime.utcnow()
 
-        conn.commit()
-        conn.close()
-
+        })
+        add_activity(
+    "Lead Added",
+    f"{name} was added as a new lead.",
+    "🟢"
+    )
         return redirect("/leads")
 
     return render_template("add_lead.html")
+from datetime import datetime
 
-@app.route("/add-followup/<int:lead_id>", methods=["POST"])
+@app.route("/add-followup/<lead_id>", methods=["POST"])
 def add_followup(lead_id):
 
     if "admin" not in session:
@@ -309,19 +285,22 @@ def add_followup(lead_id):
 
     note = request.form["note"]
 
-    conn = sqlite3.connect("leadflow.db")
-    cursor = conn.cursor()
+    # Save follow-up in MongoDB
+    followups_collection.insert_one({
+        "lead_id": lead_id,
+        "note": note,
+        "created_at": datetime.utcnow()
+    })
+    lead = leads_collection.find_one({"_id": ObjectId(id)})
 
-    cursor.execute("""
-        INSERT INTO followups (lead_id, note)
-        VALUES (?, ?)
-    """, (lead_id, note))
-
-    conn.commit()
-    conn.close()
-
+    add_activity(
+    "Follow-up Added",
+    f"A follow-up note was added for {lead['name']}.",
+    "📝"
+    )
     return redirect(f"/lead/{lead_id}")
 
+from datetime import datetime
 
 @app.route("/contact", methods=["POST"])
 def contact():
@@ -341,30 +320,22 @@ Project Details :
 {message}
 """
 
-    conn = sqlite3.connect("leadflow.db")
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        INSERT INTO leads
-        (name,email,phone,company,message,status)
-        VALUES (?,?,?,?,?,?)
-    """,
-    (
-        name,
-        email,
-        phone,
-        company,
-        full_message,
-        "New"
-    ))
-
-    conn.commit()
-    conn.close()
+    leads_collection.insert_one({
+    "name": name,
+    "email": email,
+    "phone": phone,
+    "company": company,
+    "service": service,
+    "message": full_message,
+    "status": "New",
+    "created_at": datetime.utcnow()
+})
+    
 
 
     return redirect("thank-you")
 
-@app.route("/update-status/<int:id>", methods=["POST"])
+@app.route("/update-status/<id>", methods=["POST"])
 def update_status(id):
 
     if "admin" not in session:
@@ -372,129 +343,121 @@ def update_status(id):
 
     status = request.form["status"]
 
-    conn = sqlite3.connect("leadflow.db")
-    cursor = conn.cursor()
-
-    cursor.execute(
-        "UPDATE leads SET status=? WHERE id=?",
-        (status, id)
+    leads_collection.update_one(
+        {"_id": ObjectId(id)},
+        {
+            "$set": {
+                "status": status
+            }
+        }
     )
 
-    conn.commit()
-    conn.close()
-
     return redirect(f"/lead/{id}")
-
 @app.route("/customers")
 def customers():
 
     if "admin" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("leadflow.db")
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        SELECT *
-        FROM leads
-        WHERE status = 'Converted'
-        ORDER BY created_at DESC
-    """)
-
-    customers = cursor.fetchall()
-
-    conn.close()
+    # Fetch only converted leads from MongoDB
+    customers = list(
+        leads_collection.find(
+            {"status": "Converted"}
+        ).sort("created_at", -1)
+    )
 
     return render_template(
         "customers.html",
         customers=customers
     )
+
+
+from collections import Counter
+from datetime import datetime
+
 @app.route("/reports")
 def reports():
 
     if "admin" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("leadflow.db")
-    cursor = conn.cursor()
+    # Get all leads from MongoDB
+    leads = list(leads_collection.find())
 
     # ==========================
     # Dashboard Statistics
     # ==========================
 
-    cursor.execute("SELECT COUNT(*) FROM leads")
-    total_leads = cursor.fetchone()[0]
+    total_leads = len(leads)
 
-    cursor.execute("SELECT COUNT(*) FROM leads WHERE status='New'")
-    new_leads = cursor.fetchone()[0]
+    new_leads = sum(1 for lead in leads if lead.get("status") == "New")
 
-    cursor.execute("SELECT COUNT(*) FROM leads WHERE status='Contacted'")
-    contacted = cursor.fetchone()[0]
+    contacted = sum(
+        1 for lead in leads
+        if lead.get("status") == "Contacted"
+    )
 
-    cursor.execute("SELECT COUNT(*) FROM leads WHERE status='Follow-up'")
-    followup = cursor.fetchone()[0]
+    followup = sum(
+        1 for lead in leads
+        if lead.get("status") == "Follow-up"
+    )
 
-    cursor.execute("SELECT COUNT(*) FROM leads WHERE status='Converted'")
-    converted = cursor.fetchone()[0]
+    converted = sum(
+        1 for lead in leads
+        if lead.get("status") == "Converted"
+    )
 
     # ==========================
     # Lead Sources
     # ==========================
 
-    cursor.execute("""
-        SELECT source, COUNT(*)
-        FROM leads
-        GROUP BY source
-    """)
+    source_counter = Counter()
 
-    source_data = cursor.fetchall()
+    for lead in leads:
 
-    labels = []
-    counts = []
+        source = lead.get("source", "Unknown")
 
-    for row in source_data:
-        labels.append(row[0])
-        counts.append(row[1])
+        source_counter[source] += 1
+
+    labels = list(source_counter.keys())
+
+    counts = list(source_counter.values())
 
     # ==========================
+    # Monthly Lead Growth
     # ==========================
-# Monthly Lead Growth
-# ==========================
-
-    cursor.execute("""
-SELECT
-    strftime('%m', created_at) AS month,
-    COUNT(*)
-FROM leads
-GROUP BY month
-ORDER BY month
-""")
-
-    monthly_data = cursor.fetchall()
 
     months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-]
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ]
 
-# Show all months initially with 0 leads
     growth_labels = months
+
     growth_counts = [0] * 12
 
-# Update only the months that have data
-    for month, count in monthly_data:
-      month_index = int(month) - 1
-      growth_counts[month_index] = count
+    for lead in leads:
+
+        created = lead.get("created_at")
+
+        if isinstance(created, datetime):
+
+            growth_counts[created.month - 1] += 1
+
     # ==========================
     # Conversion Rate
     # ==========================
 
     if total_leads > 0:
-        conversion_rate = round((converted / total_leads) * 100, 1)
-    else:
-        conversion_rate = 0
 
-    conn.close()
+        conversion_rate = round(
+            (converted / total_leads) * 100,
+            1
+        )
+
+    else:
+
+        conversion_rate = 0
 
     return render_template(
         "reports.html",
@@ -510,7 +473,6 @@ ORDER BY month
         growth_counts=growth_counts
     )
 
-
 @app.route("/settings")
 def settings():
 
@@ -518,16 +480,11 @@ def settings():
         return redirect("/login")
 
     return render_template("settings.html")
-
 @app.route("/admin-profile", methods=["GET", "POST"])
 def admin_profile():
 
     if "admin" not in session:
         return redirect("/login")
-
-    conn = sqlite3.connect("leadflow.db")
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
 
     # Save Changes
     if request.method == "POST":
@@ -536,203 +493,69 @@ def admin_profile():
         email = request.form["email"]
         phone = request.form["phone"]
 
-        cursor.execute("""
-        UPDATE admin_profile
-        SET
-            full_name=?,
-            email=?,
-            phone=?
-        WHERE id=1
-        """, (full_name, email, phone))
-
-        conn.commit()
+        admin_profile_collection.update_one(
+            {"_id": 1},
+            {
+                "$set": {
+                    "full_name": full_name,
+                    "email": email,
+                    "phone": phone
+                }
+            },
+            upsert=True
+        )
 
         flash("Profile updated successfully!", "success")
 
     # Load Profile
-    cursor.execute("SELECT * FROM admin_profile WHERE id=1")
-    admin = cursor.fetchone()
+    admin = admin_profile_collection.find_one({"_id": 1})
 
-    conn.close()
+    if admin is None:
+        admin = {
+            "_id": 1,
+            "full_name": "",
+            "email": "",
+            "phone": ""
+        }
 
     return render_template(
         "admin_profile.html",
         admin=admin
     )
-import sqlite3
+
+
+
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import request, redirect, render_template, session, flash, url_for
-def create_tables():
 
-    conn = sqlite3.connect("leadflow.db")
-    cursor = conn.cursor()
-
-    # ==========================
-    # Admin Login Table
-    # ==========================
-
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS admin(
-
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-        username TEXT UNIQUE NOT NULL,
-
-        password TEXT NOT NULL
-
-    )
-    """)
-
-    # Default Admin
-    cursor.execute("""
-    INSERT OR IGNORE INTO admin(id, username, password)
-    VALUES(1, 'admin', ?)
-    """, (generate_password_hash("admin123"),))
-
-    # ==========================
-    # Leads Table
-    # ==========================
-
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS leads(
-
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-        name TEXT,
-
-        email TEXT,
-
-        phone TEXT,
-
-        company TEXT,
-
-        source TEXT,
-
-        service TEXT,
-
-        budget TEXT,
-
-        message TEXT,
-
-        status TEXT DEFAULT 'New',
-
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-
-    )
-    """)
-
-    # ==========================
-    # Notes Table
-    # ==========================
-
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS notes(
-
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-        lead_id INTEGER,
-
-        note TEXT,
-
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-        FOREIGN KEY(lead_id) REFERENCES leads(id)
-
-    )
-    """)
-
-    # ==========================
-    # Follow-up Table
-    # ==========================
-
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS followups(
-
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-        lead_id INTEGER,
-
-        note TEXT,
-
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-        FOREIGN KEY(lead_id) REFERENCES leads(id)
-
-    )
-    """)
-
-    # ==========================
-    # Admin Profile
-    # ==========================
-
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS admin_profile(
-
-        id INTEGER PRIMARY KEY,
-
-        full_name TEXT,
-
-        email TEXT,
-
-        phone TEXT
-
-    )
-    """)
-
-    # Default Profile
-    cursor.execute("""
-    INSERT OR IGNORE INTO admin_profile(
-
-        id,
-        full_name,
-        email,
-        phone
-
-    )
-
-    VALUES(
-
-        1,
-
-        'Administrator',
-
-        'admin@example.com',
-
-        '+91 XXXXX XXXXX'
-
-    )
-    """)
-
-    conn.commit()
-    conn.close()
 @app.context_processor
 def inject_theme():
 
-    conn = sqlite3.connect("leadflow.db")
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    settings = settings_collection.find_one({"_id": 1})
 
-    cursor.execute("SELECT theme FROM settings WHERE id=1")
-    data = cursor.fetchone()
+    theme = "dark"
 
-    conn.close()
-
-    theme = data["theme"] if data else "dark"
+    if settings:
+        theme = settings.get("theme", "dark")
 
     return {"theme": theme}
+
 @app.context_processor
 def inject_admin():
 
-    conn = sqlite3.connect("leadflow.db")
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    admin = admin_profile_collection.find_one({"_id": 1})
 
-    cursor.execute("SELECT * FROM admin_profile WHERE id=1")
-    admin = cursor.fetchone()
+    if admin is None:
 
-    conn.close()
+        admin = {
+            "full_name": "Administrator",
+            "email": "",
+            "phone": ""
+        }
 
     return dict(admin_profile=admin)
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 @app.route("/change-password", methods=["GET", "POST"])
 def change_password():
@@ -746,94 +569,107 @@ def change_password():
         new_password = request.form["new_password"]
         confirm_password = request.form["confirm_password"]
 
-        conn = sqlite3.connect("leadflow.db")
-        conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-
-        cursor.execute("SELECT * FROM admin WHERE username='admin'")
-        admin = cursor.fetchone()
+        # Get admin from MongoDB
+        admin = admin_collection.find_one({"username": "admin"})
 
         # Check current password
-        if not check_password_hash(admin["password"], current_password):
+        if not admin or not check_password_hash(admin["password"], current_password):
             flash("Current password is incorrect!", "error")
-            conn.close()
             return render_template("change_password.html")
 
         # Check new passwords match
         if new_password != confirm_password:
             flash("New passwords do not match!", "error")
-            conn.close()
             return render_template("change_password.html")
 
-        # Update password
+        # Update password in MongoDB
         new_password_hash = generate_password_hash(new_password)
 
-        cursor.execute("""
-            UPDATE admin
-            SET password=?
-            WHERE username='admin'
-        """, (new_password_hash,))
-
-        conn.commit()
-        conn.close()
+        admin_collection.update_one(
+            {"username": "admin"},
+            {"$set": {"password": new_password_hash}}
+        )
 
         flash("Password updated successfully!", "success")
         return redirect(url_for("change_password"))
 
     return render_template("change_password.html")
-
-
 @app.route("/theme", methods=["GET", "POST"])
 def theme():
 
     if "admin" not in session:
         return redirect("/login")
 
-    conn = sqlite3.connect("leadflow.db")
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-
     if request.method == "POST":
 
         selected_theme = request.form["theme"]
 
-        cursor.execute("""
-        UPDATE settings
-        SET theme=?
-        WHERE id=1
-        """, (selected_theme,))
-
-        conn.commit()
+        settings_collection.update_one(
+            {"_id": 1},
+            {
+                "$set": {
+                    "theme": selected_theme
+                }
+            },
+            upsert=True
+        )
 
         flash("Theme updated successfully!", "success")
 
-    cursor.execute("SELECT * FROM settings WHERE id=1")
-    current_theme = cursor.fetchone()
+    current_theme = settings_collection.find_one({"_id": 1})
 
-    conn.close()
+    if current_theme is None:
+        current_theme = {
+            "_id": 1,
+            "theme": "dark"
+        }
 
     return render_template(
         "theme.html",
         current_theme=current_theme
     )
+import json
+from bson import json_util
+from flask import send_file
+import os
+
 @app.route("/backup")
 def backup_database():
 
     if "admin" not in session:
         return redirect("/login")
 
-    zip_filename = "LeadFlow_Backup.zip"
+    backup = {
 
-    with zipfile.ZipFile(zip_filename, "w", zipfile.ZIP_DEFLATED) as backup_zip:
+        "admin": list(admin_collection.find()),
 
-        backup_zip.write("leadflow.db")
-        
+        "admin_profile": list(admin_profile_collection.find()),
+
+        "leads": list(leads_collection.find()),
+
+        "followups": list(followups_collection.find()),
+
+        "settings": list(settings_collection.find())
+
+    }
+
+    backup_file = "LeadFlow_Backup.json"
+
+    with open(backup_file, "w") as file:
+
+        file.write(json_util.dumps(backup, indent=4))
+
     return send_file(
-        zip_filename,
-        as_attachment=True,
-        download_name="LeadFlow_Backup.zip"
-    )
 
+        backup_file,
+
+        as_attachment=True,
+
+        download_name="LeadFlow_Backup.json",
+
+        mimetype="application/json"
+
+    )
 @app.route("/thank-you")
 def thank_you():
     return render_template("thank_you.html")

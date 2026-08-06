@@ -1,0 +1,109 @@
+{
+    "admin": [
+        {
+            "_id": {
+                "$oid": "6a742cdc6c5d347f9485dc2c"
+            },
+            "username": "admin",
+            "password": "scrypt:32768:8:1$WsIlQKt8ANet8XKw$201dc36f6583069e0c3e752d86e73689fa0814e5c7e903b16a98551c05fd0b0b969290c9effdab1b177a207f76aac6ac5d7254b12a036fc359c7dcb4675e390a"
+        }
+    ],
+    "admin_profile": [
+        {
+            "_id": 1,
+            "email": "pragadeshwaran231@gmail.com",
+            "full_name": "pragadeshwaran R",
+            "phone": "9962785934"
+        }
+    ],
+    "leads": [
+        {
+            "_id": {
+                "$oid": "6a7431695829af8dec686245"
+            },
+            "name": "Rithik",
+            "email": "rithik@gmail.com",
+            "phone": "996278594",
+            "company": "rithik tech soluions",
+            "service": "Website Development",
+            "message": "\nService Required : Website Development\n\nProject Details :\n\nhello\r\ni wanted a website\n",
+            "status": "New",
+            "created_at": {
+                "$date": "2026-08-06T07:02:01.843Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "6a7437e23023df6ca1b9ae43"
+            },
+            "name": "pragadeshwaran",
+            "email": "pragadeshwaran231@gmail.com",
+            "phone": "09962785934",
+            "company": "Prathyusha engineering college",
+            "service": "Mobile App Development",
+            "message": "\nService Required : Mobile App Development\n\nProject Details :\n\ni want to create  an app for my restaurant\n",
+            "status": "New",
+            "created_at": {
+                "$date": "2026-08-06T07:29:38.927Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "6a743996469f2960713634c6"
+            },
+            "name": "pragadeshwaran",
+            "email": "pragadeshwaran231@gmail.com",
+            "phone": "09962785934",
+            "company": "Prathyusha engineering college",
+            "source": "Website",
+            "service": "Mobile App Development",
+            "budget": "Below \u20b950,000",
+            "status": "Converted",
+            "message": "create website fro my restauranmt",
+            "created_at": {
+                "$date": "2026-08-06T07:36:54.915Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "6a743cfe9eae78686fa54422"
+            },
+            "name": "john",
+            "email": "john@gmail.com",
+            "phone": "9865471230",
+            "company": "tech power solutions",
+            "source": "Website",
+            "service": "Mobile App Development",
+            "budget": "Below \u20b950,000",
+            "status": "New",
+            "message": "website crfeation",
+            "created_at": {
+                "$date": "2026-08-06T07:51:26.732Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "6a743d359eae78686fa54423"
+            },
+            "name": "harish",
+            "email": "harish@gmail.com",
+            "phone": "9632587410",
+            "company": "Prathyusha engineering college",
+            "source": "Website",
+            "service": "Digital Marketing",
+            "budget": "\u20b950,000 - \u20b91,00,000",
+            "status": "Contacted",
+            "message": "cointacted",
+            "created_at": {
+                "$date": "2026-08-06T07:52:21.526Z"
+            }
+        }
+    ],
+    "followups": [],
+    "settings": [
+        {
+            "_id": 1,
+            "theme": "light"
+        }
+    ]
+}

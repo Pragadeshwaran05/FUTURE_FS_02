@@ -41,16 +41,16 @@
 
             <tr>
 
-                <td>{{ customer[0] }}</td>
-                <td>{{ customer[1] }}</td>
-                <td>{{ customer[2] }}</td>
-                <td>{{ customer[3] }}</td>
-                <td>{{ customer[4] }}</td>
-                <td>{{ customer[9] }}</td>
+                <td>{{ customer["_id"] }}</td>
+                <td>{{ customer["name"] }}</td>
+                <td>{{ customer["email"] }}</td>
+                <td>{{ customer["phone"] }}</td>
+                <td>{{ customer["company"] }}</td>
+                <td>{{ customer.get("service","-") }}</td>
 
                 <td class="action-buttons">
 
-                    <a href="/lead/{{ customer[0] }}" class="view-btn">
+                    <a href="/lead/{{ customer['_id'] }}" class="view-btn">
                         <i class="fas fa-eye"></i> View
                     </a>
 

@@ -70,17 +70,47 @@
 
     </div>
 
-    <div class="activity-box">
+  <div class="activity-box">
 
-        <h2>Recent Activity</h2>
+    <h2>Recent Activity</h2>
 
-        <ul>
+    <div class="activity-list">
 
-            <li>No activities yet.</li>
+        {% if activities %}
 
-        </ul>
+            {% for activity in activities %}
+
+            <div class="activity-item">
+
+                <div class="activity-icon">
+                    {{ activity.icon }}
+                </div>
+
+                <div class="activity-content">
+
+                    <strong>{{ activity.action }}</strong>
+
+                    <p>{{ activity.description }}</p>
+
+                    <small>
+                        {{ activity.created_at.strftime("%d %b %Y, %I:%M %p") }}
+                    </small>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>No recent activities.</p>
+
+        {% endif %}
 
     </div>
+
+</div>
 
 </div>
 

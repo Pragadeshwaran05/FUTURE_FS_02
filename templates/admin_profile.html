@@ -32,7 +32,7 @@
             <input
                 type="text"
                 name="full_name"
-                value="{{ admin['full_name'] if admin else '' }}"
+                value="{{ admin.get('full_name','') }}"
                 required>
         </div>
 
@@ -41,7 +41,7 @@
             <input
                 type="email"
                 name="email"
-                value="{{ admin['email'] if admin else '' }}"
+                value="{{ admin.get('email','') }}"
                 required>
         </div>
 
@@ -50,7 +50,7 @@
             <input
                 type="text"
                 name="phone"
-                value="{{ admin['phone'] if admin else '' }}"
+                value="{{ admin.get('phone','') }}"
                 required>
         </div>
 

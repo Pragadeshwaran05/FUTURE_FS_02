@@ -100,6 +100,15 @@ align-items:center;
 
 margin-bottom:40px;
 }
+/* Dark Theme */
+body.dark .topbar h1{
+    color:#FFFFFF !important;
+}
+
+/* Light Theme */
+body.light .topbar h1{
+    color:#111827 !important;
+}
 
 .logout{
 
@@ -205,16 +214,13 @@ gap:30px;
 .chart-box,
 .activity-box{
 
-background:#171F34;
+    padding:30px;
 
-padding:30px;
+    border-radius:20px;
 
-border-radius:20px;
-
-min-height:350px;
+    min-height:350px;
 
 }
-
 .chart-box h2,
 .activity-box h2{
 
@@ -274,13 +280,17 @@ th{
     font-size:15px;
 
 }
-
 td{
-
     padding:18px;
-    border-bottom:1px solid #2B3755;
     color:#D1D5DB;
+}
 
+tbody tr{
+    border-bottom:1px solid #2B3755;
+}
+
+tbody tr:last-child{
+    border-bottom:none;
 }
 
 tbody tr:hover{
@@ -590,17 +600,22 @@ color:#E5E7EB;
     white-space:pre-line;
 
 }
-
-.project-table tr:hover td{
-
+/* Dark Theme */
+body.dark .project-table tr:hover td{
     background:#172033;
-
 }
 
-.project-table tr:hover th{
-
+body.dark .project-table tr:hover th{
     background:#273244;
+}
 
+/* Light Theme */
+body.light .project-table tr:hover td{
+    background:#F3F4F6;
+}
+
+body.light .project-table tr:hover th{
+    background:#E5E7EB;
 }
 
 .note-textarea{
@@ -677,13 +692,53 @@ color:#E5E7EB;
     margin-top:18px;
     transition:0.3s ease;
 }
-
+body.dark .note-card{
+    background:#171F34;
+    color:#ffffff;
+}
+body.light .note-card{
+    background:#ffffff !important;
+    color:#111827 !important;
+    border:1px solid #E5E7EB;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+body.light .note-card h3,
+body.light .note-card p,
+body.light .note-card span,
+body.light .note-card small{
+    color:#111827 !important;
+}
+body.light .note-date{
+    color:#6B7280 !important;
+}
 .note-card:hover{
     border-color:#7C3AED;
     transform:translateY(-2px);
     box-shadow:0 10px 25px rgba(124,58,237,.20);
 }
+/* Dark Theme */
+body.dark .note-message{
+    color:#D1D5DB;
+}
 
+/* Light Theme */
+body.light .note-message{
+    color:#111827 !important;
+}
+/* Follow-up Note Title - Light Theme */
+body.light .note-title{
+    color:#111827 !important;
+}
+
+/* Date */
+body.light .note-date{
+    color:#6B7280 !important;
+}
+
+/* Note Content */
+body.light .note-content{
+    color:#111827 !important;
+}
 .note-header{
     display:flex;
     align-items:center;
@@ -803,10 +858,11 @@ color:#E5E7EB;
 
 .action-buttons{
     display:flex;
-    gap:10px;
+    justify-content:center;
     align-items:center;
+    gap:10px;
+    white-space:nowrap;
 }
-
 .view-btn,
 .edit-btn,
 .delete-btn{
@@ -852,12 +908,24 @@ color:#E5E7EB;
     font-size:12px;
 }
 .chart-card{
-    background:#1B2238;
     border-radius:16px;
     padding:25px;
     margin-top:30px;
+    box-shadow:0 8px 24px rgba(0,0,0,.15);
+}
+
+/* ---------- Dark Theme ---------- */
+
+body.dark .chart-card{
+    background:#1B2238;
     border:1px solid rgba(255,255,255,.05);
-    box-shadow:0 8px 24px rgba(0,0,0,.25);
+}
+
+/* ---------- Light Theme ---------- */
+
+body.light .chart-card{
+    background:#FFFFFF;
+    border:1px solid #E5E7EB;
 }
 .chart-container{
     height:450px;
@@ -867,7 +935,34 @@ color:#E5E7EB;
     width:100%;
     height:400px;
 }
+.chart-card{
+    border-radius:16px;
+    padding:25px;
+    margin-top:30px;
+    box-shadow:0 8px 24px rgba(0,0,0,.15);
+}
 
+/* Dark Theme */
+
+body.dark .chart-card{
+    background:#1B2238;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+body.dark .chart-card h2{
+    color:#ffffff;
+}
+
+/* Light Theme */
+
+body.light .chart-card{
+    background:#ffffff;
+    border:1px solid #E5E7EB;
+}
+
+body.light .chart-card h2{
+    color:#111827;
+}
 </style>
 
 </head>

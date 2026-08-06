@@ -8,9 +8,9 @@
 
     <div>
 
-        <h1>{{ lead[1] }}</h1>
+        <h1>{{ lead["name"] }}</h1>
 
-        <p>Lead ID : #{{ lead[0] }}</p>
+        <p>Lead ID : {{ lead["_id"] }}</p>
 
     </div>
 
@@ -18,14 +18,13 @@
 
         <span class="status-badge">
 
-            {{ lead[7] }}
+            {{ lead["status"] }}
 
         </span>
 
     </div>
 
 </div>
-
 
 
 <div class="details-grid">
@@ -38,7 +37,7 @@
 
             <label>Email</label>
 
-            <p>{{ lead[2] }}</p>
+            <p>{{ lead["email"] }}</p>
 
         </div>
 
@@ -46,7 +45,7 @@
 
             <label>Phone</label>
 
-            <p>{{ lead[3] }}</p>
+            <p>{{ lead["phone"] }}</p>
 
         </div>
 
@@ -54,12 +53,11 @@
 
             <label>Company</label>
 
-            <p>{{ lead[4] }}</p>
+            <p>{{ lead["company"] }}</p>
 
         </div>
 
     </div>
-
 
 
     <div class="info-card">
@@ -70,7 +68,7 @@
 
             <label>Source</label>
 
-            <p>{{ lead[5] }}</p>
+            <p>{{ lead.get("source","-") }}</p>
 
         </div>
 
@@ -78,7 +76,7 @@
 
             <label>Created</label>
 
-            <p>{{ lead[8] }}</p>
+            <p>{{ lead["created_at"] }}</p>
 
         </div>
 
@@ -91,44 +89,45 @@
 
     <h3>📝 Project Requirement</h3>
 
-   <table class="project-table">
+    <table class="project-table">
 
-    <tr>
-        <th>💼 Service Required</th>
-        <td>{{ lead[9] or "Not Specified" }}</td>
-    </tr>
+        <tr>
+            <th>💼 Service Required</th>
+            <td>{{ lead.get("service","Not Specified") }}</td>
+        </tr>
 
-    <tr>
-        <th>💰 Estimated Budget</th>
-        <td>{{ lead[10] or "Not Specified" }}</td>
-    </tr>
+        <tr>
+            <th>💰 Estimated Budget</th>
+            <td>{{ lead.get("budget","Not Specified") }}</td>
+        </tr>
 
-    <tr>
-        <th>📋 Project Details</th>
-        <td style="white-space: pre-line;">
-            {{ lead[6] or "No project details provided." }}
-        </td>
-    </tr>
+        <tr>
+            <th>📋 Project Details</th>
+            <td style="white-space: pre-line;">
+                {{ lead["message"] }}
+            </td>
+        </tr>
 
-</table>
+    </table>
 
 </div>
+
 
 <div class="info-card mt-4">
 
 <h3>🔄 Lead Status</h3>
 
-<form action="/update-status/{{ lead[0] }}" method="POST">
+<form action="/update-status/{{ lead['_id'] }}" method="POST">
 
 <select name="status" class="status-select">
 
-<option {% if lead[7]=='New' %}selected{% endif %}>New</option>
+<option {% if lead["status"]=="New" %}selected{% endif %}>New</option>
 
-<option {% if lead[7]=='Contacted' %}selected{% endif %}>Contacted</option>
+<option {% if lead["status"]=="Contacted" %}selected{% endif %}>Contacted</option>
 
-<option {% if lead[7]=='Follow-up' %}selected{% endif %}>Follow-up</option>
+<option {% if lead["status"]=="Follow-up" %}selected{% endif %}>Follow-up</option>
 
-<option {% if lead[7]=='Converted' %}selected{% endif %}>Converted</option>
+<option {% if lead["status"]=="Converted" %}selected{% endif %}>Converted</option>
 
 </select>
 
@@ -141,7 +140,7 @@ Update Status
 </form>
 
 </div>
-   <!-- End of Lead Status -->
+
 
 <!-- Follow-up Notes -->
 
@@ -149,7 +148,7 @@ Update Status
 
     <h3>📝 Follow-up Notes</h3>
 
-    <form action="/add-followup/{{ lead[0] }}" method="POST">
+    <form action="/add-followup/{{ lead['_id'] }}" method="POST">
 
         <textarea
             name="note"
@@ -170,40 +169,39 @@ Update Status
 
         {% for followup in followups %}
 
+        <div class="note-card">
 
-<div class="note-card">
+            <div class="note-top">
 
-    <div class="note-top">
+                <div class="note-left">
 
-        <div class="note-left">
+                    <div class="note-icon">
+                        📝
+                    </div>
 
-            <div class="note-icon">
-                📝
+                    <div>
+
+                        <div class="note-title">
+                            Follow-up Note
+                        </div>
+
+                        <div class="note-date">
+                            📅 {{ followup["created_at"] }}
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <div>
-
-                <div class="note-title">
-                    Follow-up Note
-                </div>
-
-                <div class="note-date">
-                    📅 {{ followup[3] }}
-                </div>
-
+            <div class="note-message">
+                {{ followup["note"] }}
             </div>
 
         </div>
 
-    </div>
-
-    <div class="note-message">
-        {{ followup[2] }}
-    </div>
-
-</div>
-
-{% endfor %}
+        {% endfor %}
 
     {% else %}
 
@@ -221,6 +219,7 @@ Update Status
 
 </div>
 
+
 <div style="margin-top:30px;">
 
 <a href="/leads" class="back-btn">
@@ -232,5 +231,3 @@ Update Status
 </div>
 
 {% endblock %}
-
-
