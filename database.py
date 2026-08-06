@@ -99,6 +99,31 @@ CREATE TABLE IF NOT EXISTS settings (
 INSERT OR IGNORE INTO settings (id, theme)
 VALUES (1, 'light')
 """)
+
+    # ------------------------
+# Admin Profile Table
+# ------------------------
+    cursor.execute("""
+CREATE TABLE IF NOT EXISTS admin_profile (
+
+    id INTEGER PRIMARY KEY,
+
+    full_name TEXT,
+    email TEXT,
+    phone TEXT,
+    bio TEXT,
+    profile_image TEXT
+
+)
+""")
+
+# Insert default row
+    cursor.execute("""
+INSERT OR IGNORE INTO admin_profile
+(id, full_name, email, phone, bio, profile_image)
+VALUES
+(1, 'Administrator', '', '', '', '')
+""")
     conn.commit()
     conn.close()
 
