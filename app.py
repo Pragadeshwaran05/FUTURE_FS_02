@@ -9,10 +9,10 @@ import json
 from bson import json_util
 from mongodb import admin_collection, leads_collection
 from bson import ObjectId
-
+from flask import Flask, render_template, request, redirect, session, flash
 from bson import ObjectId
 from datetime import datetime
-
+from flask import Flask, render_template, request, redirect, session, flash
 from mongodb import (
     admin_collection,
     leads_collection,
@@ -120,6 +120,8 @@ def logout():
 
     session.pop("admin", None)
 
+    flash("Logged out successfully!", "success")
+
     return redirect("/")
 
 @app.route("/leads")
@@ -203,6 +205,7 @@ def edit_lead(id):
         f"{name} was converted into a customer.",
         "🎉"
             )
+        flash("Lead updated successfully!", "success")
         return redirect(f"/lead/{id}")
 
     return render_template(
@@ -351,7 +354,7 @@ def update_status(id):
             }
         }
     )
-
+    flash("Lead status updated successfully!", "success")   
     return redirect(f"/lead/{id}")
 @app.route("/customers")
 def customers():
