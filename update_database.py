@@ -69,7 +69,24 @@ VALUES(
     '+91 XXXXX XXXXX'
 )
 """)
+# ------------------------
+# Followups Table
+# ------------------------
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS followups(
 
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    lead_id INTEGER NOT NULL,
+
+    note TEXT NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (lead_id) REFERENCES leads(id)
+
+)
+""")
 conn.commit()
 conn.close()
 
