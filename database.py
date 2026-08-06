@@ -81,7 +81,24 @@ CREATE TABLE IF NOT EXISTS leads(
 
     )
     """)
+    # ------------------------
+# Settings Table
+# ------------------------
+    cursor.execute("""
+CREATE TABLE IF NOT EXISTS settings (
 
+    id INTEGER PRIMARY KEY,
+
+    theme TEXT DEFAULT 'light'
+
+)
+""")
+
+# Insert default row if it doesn't exist
+    cursor.execute("""
+INSERT OR IGNORE INTO settings (id, theme)
+VALUES (1, 'light')
+""")
     conn.commit()
     conn.close()
 
