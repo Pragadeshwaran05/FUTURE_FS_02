@@ -124,6 +124,24 @@ INSERT OR IGNORE INTO admin_profile
 VALUES
 (1, 'Administrator', '', '', '', '')
 """)
+    # ------------------------
+# Followups Table
+# ------------------------
+    cursor.execute("""
+CREATE TABLE IF NOT EXISTS followups(
+
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    lead_id INTEGER NOT NULL,
+
+    note TEXT NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (lead_id) REFERENCES leads(id)
+
+)
+""")
     conn.commit()
     conn.close()
 
