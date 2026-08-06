@@ -16,8 +16,11 @@ def create_admin():
     )
     """)
 
-    username = "admin"
-    password = generate_password_hash("admin123")
+    import os
+
+    username = os.getenv("ADMIN_USERNAME", "admin")
+    raw_password = os.getenv("ADMIN_PASSWORD", "admin123")
+    password = generate_password_hash(raw_password)
 
     cursor.execute("SELECT * FROM admin WHERE username=?", (username,))
 
